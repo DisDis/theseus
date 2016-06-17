@@ -31,10 +31,10 @@ part of theseus.solvers;
       Node next;
 
       //# The array of points leading from the starting point, to this node.
-      List get history=>_history;
-      List _history;
+      List<Position> get history=>_history;
+      List<Position> _history;
 
-      Node(this.point, this.under, this.path_cost, this.estimate,List history){ //#:nodoc:
+      Node(this.point, this.under, this.path_cost, this.estimate,List<Position> history){ //#:nodoc:
         //_point, _under, _path_cost, _estimate = point, under, path_cost, estimate
         _history = history;
         cost = path_cost + estimate;
@@ -77,7 +77,7 @@ part of theseus.solvers;
         _visits = new List.generate(_maze.height,(_)=>new List.generate(_maze.width,(_)=> 0));
       }
 
-      List current_solution(){ //#:nodoc:
+      List<Position> current_solution(){ //#:nodoc:
         return new List.from(_open.history)..add(_open.point);
       }
 
@@ -123,7 +123,7 @@ part of theseus.solvers;
         Math.sqrt(Math.pow((_b.x - pt.x),2)/* **2 */ + Math.pow((_b.y - pt.y),2) /* **2 */);
       }
 
-      _add_node(Position pt,bool under,int path_cost,List history){ //#:nodoc:
+      _add_node(Position pt,bool under,int path_cost,List<Position> history){ //#:nodoc:
         if (_visits[pt.y][pt.x] & (under ? 2 : 1) != 0){
          return; 
         }

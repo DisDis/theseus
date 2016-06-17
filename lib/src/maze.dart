@@ -1,9 +1,10 @@
 part of theseus;
 
 class Position{
-  int x;
-  int y;
+  int x;//[0]
+  int y;//[1]
   Position();
+  Position dup()=> new Position.xy(x,y);
   Position.xy(this.x,this.y);
 }
 
@@ -373,23 +374,23 @@ class MazeOptions{
     //# a cell (in sequence) leading from the start to the finish.
     //#
     //# See //#new_solver for a description of the supported options.
-    solvers.Base solve(options){
-      return new_solver(options).solution;
+    List<Position> solve(options){
+      return new_solver(options).solution();
    }
 
     //# Returns the bitfield for the cell at the given (+x+,+y+) coordinate.
-    getCell(int x,int y){//operator [](x,y){
+    int getCell(int x,int y){//operator [](x,y){
       return _cells[y][x];
    }
-   operator [](Position xy){
+   int operator [](Position xy){
      return getCell(xy.x,xy.y);
    }
-   operator []=(Position xy,value){
+   operator []=(Position xy,int value){
      return setCell(xy.x,xy.y,value);
    }
 
     //# Sets the bitfield for the cell at the given (+x+,+y+) coordinate.
-    setCell(int x,int y, value){//operator []=(x,y,value){
+    setCell(int x,int y,int value){//operator []=(x,y,value){
       return _cells[y][x] = value;
    }
 

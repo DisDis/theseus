@@ -96,7 +96,7 @@ class RecursiveBacktracker extends Base {
           var _tmp = _stack.removeLast();
           _x = _tmp[0];
           _y = _tmp[1];
-          _tries = _tmp[2];
+          _tries = _tmp[2] as List<int>;
         }
       }
     }

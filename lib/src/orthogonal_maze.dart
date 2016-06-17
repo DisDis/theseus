@@ -35,15 +35,15 @@ part of theseus;
 
       switch (_symmetry){
         case SymmetryType.x:
-        available_width = available_width / 2;
+        available_width = available_width ~/ 2;
         break;
         case SymmetryType.y:
-        available_height = available_height / 2;
+        available_height = available_height ~/ 2;
         break;
         case SymmetryType.xy: 
         case SymmetryType.radial:  
-        available_width = available_width / 2;
-        available_height = available_height / 2;
+        available_width = available_width ~/ 2;
+        available_height = available_height ~/ 2;
         break;
       }
 

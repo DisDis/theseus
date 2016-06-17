@@ -98,7 +98,7 @@ part of theseus.solvers;
       //# Returns the current (potentially partial) solution to the maze. This
       //# is for use while the algorithm is running, so that the current best-solution
       //# may be inspected (or displayed).
-      List current_solution()
+      Iterable<Position> current_solution()
       {
         throw new UnimplementedError("solver subclasses must implement 'current_solution'");
       }

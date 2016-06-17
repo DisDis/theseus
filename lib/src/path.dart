@@ -46,9 +46,15 @@ enum LinkType{
     //#
     //#   how = path.link(from, to)
     //#   path.set(to, how)
-    void set(point,LinkType how/*=:over*/){
+    void set(point,[LinkType how = LinkType.over]) {
       _cells[point] |= (how == LinkType.over ? 1 : 2);
     }
+    //# Returns true if the given point is occuped in the path, for the given plane.
+    //# If +how+ is +:over+, the primary plane is queried. Otherwise, the under
+    //# plane is queried.
+//    bool set(point,LinkType how = LinkType.over){
+//      return _cells[point] & (how == LinkType.over ? 1 : 2) != 0;
+//    }
 
     //# Creates a link between the two given points. The points must be adjacent.
     //# If the corresponding passage in the maze moves into the under plane as it
@@ -82,20 +88,13 @@ enum LinkType{
     //# Path instance) to the current Path object. The metadata from the parameter
     //# is not copied.
     add_path(Path path){
-      path.paths.each do |pt, value| {
+      path.paths.forEach((pt, value) {
         _paths[pt] |= value;
-      }
+      });
 
-      path.cells.each do |pt, value| {
+      path.cells.forEach((pt, value) {
         _cells[pt] |= value;
-      }
-    }
-    
-    //# Returns true if the given point is occuped in the path, for the given plane.
-    //# If +how+ is +:over+, the primary plane is queried. Otherwise, the under
-    //# plane is queried.
-    bool set(point,LinkType how/*=:over*/){
-      return _cells[point] & (how == LinkType.over ? 1 : 2) != 0;
+      });
     }
 
     //# Returns true if there is a path from the given point, in the given direction.

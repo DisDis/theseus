@@ -72,7 +72,7 @@ part of theseus.formatters;
         _options = DEFAULTS.merge(options);
 
         [#background, #wall_color, #cell_color, #solution_color].forEach((c){
-          if (String === _options[c]){
+          if (String == _options[c]){
              _options[c] = ChunkyPNG.Color.from_hex(_options[c]);
           }
         });
@@ -95,10 +95,10 @@ part of theseus.formatters;
       //# returned. If no path describes the given point, then the value of the
       //# +:cell_color+ option is returned.
       color_at(pt, [direction=null]){
-        _paths.each do |path|
+        _paths.forEach((path){
         if (direction ? path.path?(pt, direction) : path.set?(pt))
-          {return path[#color];}; 
-        }
+          {return path[#color];}
+        });
 
         return _options[#cell_color];
       }
@@ -150,14 +150,14 @@ part of theseus.formatters;
       fill_poly(canvas, points, color){
         min_y = 1000000;
         max_y = -1000000;
-        points.each do |x,y|{
+        points.forEach((x,y){
           if (y < min_y){
             min_y = y ;
           }
           if (y > max_y){
             max_y = y;
           }
-        }
+        });
 
         min_y = clamp(min_y, 0, canvas.height-1);
         max_y = clamp(max_y, 0, canvas.height-1);
@@ -166,12 +166,12 @@ part of theseus.formatters;
           nodes = [];
 
           prev = points.last;
-          points.each do |point|{
+          points.forEach((point){
             if (point[1] < y && prev[1] >= y || prev[1] < y && point[1] >= y){
-              nodes << (point[0] + (y - point[1]).to_f / (prev[1] - point[1]) * (prev[0] - point[0]));
+              nodes /*<<*/ =  (point[0] + (y - point[1]).to_f / (prev[1] - point[1]) * (prev[0] - point[0]));
             }
             prev = point;
-          }
+          });
 
           if (nodes.empty?){
             next 

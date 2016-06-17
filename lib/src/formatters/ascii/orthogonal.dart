@@ -3,7 +3,24 @@ part of theseus.formatters;
 //
 //require 'theseus/formatters/ascii'
 enum ASCIIOrthogonalMode{
-  plain,unicode,lines
+  /**
+   * Uses standard 7-bit ASCII characters. Width is 2x+1, height is
+   * y+1. This mode cannot render weave mazes without significant
+   * ambiguity.
+   */
+  plain,
+  /**
+   * Uses unicode characters to render cleaner lines. Width is
+   * 3x, height is 2y. This mode has sufficient detail to correctly
+   * render mazes with weave!
+   */
+  unicode,
+  /**
+   * Draws passages as lines, using unicode characters. Width is
+   * x, height is y. This mode can render weave mazes, but with some
+   * ambiguity.
+   */
+  lines
 }
 
 
