@@ -82,9 +82,9 @@ part of theseus.solvers;
       }
 
       @override
-      bool step(){ //#:nodoc:
+      Position step(){ //#:nodoc:
         if (_open ==null ){//!_open
-          return false;
+          return null;
         }
 
         Node current = _open;
@@ -114,7 +114,7 @@ part of theseus.solvers;
           });
         }
 
-        return current != null;
+        return current.point; //current
       }
 
       //private

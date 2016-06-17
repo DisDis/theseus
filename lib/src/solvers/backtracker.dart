@@ -31,16 +31,16 @@ class BacktrackerStackItem{
 
       final BacktrackerStackItem FAIL_POSITION = new BacktrackerStackItem(null,null);
       
-     bool step(){//#:nodoc:
+     Position step(){//#:nodoc:
         if (_stack.length ==1 && _stack[0] == FAIL_POSITION/*[:fail]*/){
-          return false;
+          return null;//false;
         }else if (_stack.isEmpty){
           _stack.add(FAIL_POSITION);
           _stack.add([_a, _maze.potential_exits_at(_a.x, _a.y).dup()]);
-          return _a != null;
+          return _a;
         }else if (_stack.last.position == _b){
           _solution = _stack.map((item)=>item.position);//_stack[1..-1].map { |pt, tries| pt };
-          return false;
+          return null;//false;
         }else{
           Position xy = _stack.last.position;//_stack.last[0];
           var cell = _maze.getCell(x, y);
@@ -82,7 +82,7 @@ class BacktrackerStackItem{
               }
 
               _stack.add(new BacktrackerStackItem(p, directions));
-              return p.dup;
+              return p.dup();
             }
           }
         }

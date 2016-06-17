@@ -3,7 +3,7 @@ import 'package:theseus/src/formatters/formatters.dart' as formatters;
 import 'package:theseus/ruby_port.dart';
 
 main(){
-    var mazeOption = new MazeOptions(width: 50, height: 50);
+    var mazeOption = new MazeOptions(width: 20, height: 20);
     //srand(14);
     Maze orthogonalMaze = new OrthogonalMaze(mazeOption);
     print("generating the maze...");

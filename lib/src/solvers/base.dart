@@ -63,16 +63,16 @@ part of theseus.solvers;
       //#
       //# If the maze has not yet been solved, this yields the result of calling
       //# //#step, until the maze has been solved.
-     Iterable<bool> each() sync*{
+     Iterable<Position> each() sync*{
         if (solved/*?*/){
-          solution().forEach((s){ yield s; });
-        }else{
-          //yield s while s = step()
-          var s;
-          while (s = step()){
+          for (var s in solution()){
             yield s;
           }
-
+        }else{
+          var s;
+          while (s = step()!=null){
+            yield s;
+          }
         }
       }
 
@@ -106,7 +106,7 @@ part of theseus.solvers;
       //# Runs a single iteration of the solution algorithm. Returns +false+ if the
       //# algorithm has completed, and non-nil otherwise. The return value is
       //# algorithm-dependent.
-      bool step()
+      Position step()
       {
         throw new UnimplementedError("solver subclasses must implement 'step'");
       }
