@@ -29,9 +29,9 @@
             py = @options[:outer_padding] + y * metrics[:inc]
             maze.row_length(y).times do |x|
               cell = maze[x, y]
-              next if cell == 0
+              if (cell == 0)  {continue;} //next
 
-              px = @options[:outer_padding] + x * metrics[:inc]
+        px = @options[:outer_padding] + x * metrics[:inc]
 
               if (y + x) % 2 == 0
                 draw_octogon_cell(canvas, [x, y], px, py, cell, metrics)

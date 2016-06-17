@@ -249,9 +249,9 @@ part of theseus;
     if (format == FormatType.ascii) {
       return new formatters.ASCIIOrthogonal(this, options);
     } 
-//      else if (format is FormatType.png) {
+      else if (format == FormatType.png) {
       //Formatters::PNG.const_get(type).new(self, options).to_blob
-//      } 
+      }
     else
     {
       throw new ArgumentError("unknown format: $format");

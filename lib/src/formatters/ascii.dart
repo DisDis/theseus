@@ -40,7 +40,7 @@ class Dimensions{
       }
 
       //# Returns the canvas as a multiline string, suitable for displaying.
-      toString(){
+      String toString(){
         return _chars.map((row)=>row.join()).join("\n");
       }
     }

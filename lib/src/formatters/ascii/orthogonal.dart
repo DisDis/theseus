@@ -2,7 +2,7 @@ part of theseus.formatters;
 ////# encoding: UTF-8
 //
 //require 'theseus/formatters/ascii'
-enum ASCIIOrthogonalMode{
+enum ASCIIMode{
   /**
    * Uses standard 7-bit ASCII characters. Width is 2x+1, height is
    * y+1. This mode cannot render weave mazes without significant
@@ -50,16 +50,16 @@ enum ASCIIOrthogonalMode{
       class ASCIIOrthogonal extends ASCII{
         //# Returns the dimensions of the given maze, rendered in the given mode.
         //# The +mode+ must be +:plain+, +:unicode+, or +:lines+.
-        static Dimensions dimensions_for(Maze maze,[ASCIIOrthogonalMode mode]){
+        static Dimensions dimensions_for(Maze maze,[ASCIIMode mode]){
           if (mode == null){
-            mode = ASCIIOrthogonalMode.plain;
+            mode = ASCIIMode.plain;
           }
           switch (mode){
-            case ASCIIOrthogonalMode.plain:
+            case ASCIIMode.plain:
             return new Dimensions(maze.width * 2 + 1, maze.height + 1);
-            case ASCIIOrthogonalMode.unicode:
+            case ASCIIMode.unicode:
               return new Dimensions(maze.width * 3, maze.height * 2);
-            case ASCIIOrthogonalMode.lines:
+            case ASCIIMode.lines:
               return new Dimensions(maze.width, maze.height);
             default:
             throw new Exception("unknown mode $mode");
@@ -69,9 +69,9 @@ enum ASCIIOrthogonalMode{
         //# Create and return a fully initialized ASCII canvas. The +options+
         //# parameter may specify a +:mode+ parameter, as described in the documentation
         //# for this class.
-        ASCIIOrthogonal(OrthogonalMaze maze, [ASCIIOrthogonalMode mode = ASCIIOrthogonalMode.plain]):super(dimensions_for(maze, mode).width,dimensions_for(maze, mode).height){
+        ASCIIOrthogonal(OrthogonalMaze maze, [ASCIIMode mode = ASCIIMode.plain]):super(dimensions_for(maze, mode).width,dimensions_for(maze, mode).height){
           if (mode == null){
-                      mode = ASCIIOrthogonalMode.plain;
+                      mode = ASCIIMode.plain;
                     }
 
 //          width, height = dimensions_for(maze, mode);
@@ -81,9 +81,9 @@ enum ASCIIOrthogonalMode{
             var length = maze.row_length(y);
             for (int x =0 ; x < length; x++){
               switch (mode){
-                case  ASCIIOrthogonalMode.plain : _draw_plain_cell(maze, x, y);break;
-                case  ASCIIOrthogonalMode.unicode : _draw_unicode_cell(maze, x, y);break;
-                case  ASCIIOrthogonalMode.lines : _draw_line_cell(maze, x, y);break;
+                case  ASCIIMode.plain : _draw_plain_cell(maze, x, y);break;
+                case  ASCIIMode.unicode : _draw_unicode_cell(maze, x, y);break;
+                case  ASCIIMode.lines : _draw_line_cell(maze, x, y);break;
               }
             }
           }

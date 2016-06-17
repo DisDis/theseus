@@ -174,7 +174,7 @@ part of theseus.formatters;
           });
 
           if (nodes.empty?){
-            next 
+        continue; //next
           }
           nodes.sort!
 
@@ -188,7 +188,7 @@ part of theseus.formatters;
               x2= tmp;
              } 
             if (x1 < 0 || x2 >= canvas.width){
-              next 
+        continue; // next
             }
             x1.ceil.upto(x2.floor) do |x|{
               canvas.point(x, y, color);

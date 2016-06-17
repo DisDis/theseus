@@ -16,7 +16,8 @@ enum WrapType{
   x ,y,xy
 }
 enum FormatType{
-  ascii
+  ascii,
+    png
 }
 
 class MazeOptions{

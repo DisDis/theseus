@@ -46,15 +46,14 @@ part of theseus;
   
     @override
     to(FormatType format, [options]) {
-      if (format == FormatType.ascii) {
-           return new formatters.ASCIIDelta(this, options);
-         } 
-//      else if (format is FormatType.png) {
-           //Formatters::PNG.const_get(type).new(self, options).to_blob
-//      } 
-         else
-         {
-           throw new ArgumentError("unknown format: $format");
-         }
+        if (format == FormatType.ascii) {
+            return new formatters.ASCIIDelta(this, options);
+        }
+        else if (format == FormatType.png) {
+            //Formatters::PNG.const_get(type).new(self, options).to_blob
+        }
+        else {
+            throw new ArgumentError("unknown format: $format");
+        }
     }
 }
