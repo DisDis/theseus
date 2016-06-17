@@ -1,0 +1,8 @@
+name: theseus
+version: 1.0.3
+authors:
+- Jamis Buck <jamis@jamisbuck.org>
+- Igor Demyanov <igor.demyanov@gmail.com>
+description: Theseus port https://github.com/jamis/theseus
+dev_dependencies:
+  test: "^0.12.0"
