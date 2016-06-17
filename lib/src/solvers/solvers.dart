@@ -1,4 +1,6 @@
 library theseus.solvers;
 import 'dart:math' as Math;
-import "../../theseus.dart";
+import "package:theseus/theseus.dart";
+import "package:theseus/src/algorithms/algorithms.dart" as algorithms;
 part "base.dart";
+part "astar.dart";

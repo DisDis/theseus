@@ -1,7 +1,7 @@
 library theseus.formatters;
 
-import '../../ruby_port.dart' as ruby;
-import "../../theseus.dart";
+import 'package:theseus/ruby_port.dart' as ruby;
+import "package:theseus/theseus.dart";
 
 part 'ascii.dart';
 part 'ascii/orthogonal.dart';

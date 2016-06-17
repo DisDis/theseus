@@ -12,7 +12,7 @@ part of theseus.solvers;
       //include Comparable
 
       //# The point in the maze associated with this node.
-      var point;
+      Position point;
 
       //# Whether the node is on the primary plane (+false+) or the under plane (+true+)
       bool under;
@@ -34,12 +34,15 @@ part of theseus.solvers;
       List get history=>_history;
       List _history;
 
-      Node(this.point, this.under, this.path_cost, this.estimate, history){ //#:nodoc:
+      Node(this.point, this.under, this.path_cost, this.estimate,List history){ //#:nodoc:
         //_point, _under, _path_cost, _estimate = point, under, path_cost, estimate
         _history = history;
         cost = path_cost + estimate;
       }
 
+     int compareTo(Node other){
+          return cost.compareTo(other.cost);
+      }
       // TODO:Comparable
 //      def <=>(node) //#:nodoc:
 //        cost <=> node.cost
@@ -67,71 +70,73 @@ part of theseus.solvers;
       //# in sorted order, with the most likely candidate at the head of the list.
       Node get open=>_open;
       Node _open;
+      List<List<int>> _visits;
 
       Astar(Maze maze/*, a=maze.start, b=maze.finish*/):super(maze,maze.start,maze.finish){ //#:nodoc:
         _open = new Node(_a, false, 0, _estimate(_a), []);
-        _visits = new List.generator(_maze.height,(_)=>new List.generator(_maze.width,(_)=> 0));
+        _visits = new List.generate(_maze.height,(_)=>new List.generate(_maze.width,(_)=> 0));
       }
 
-      current_solution(){ //#:nodoc:
-        return _open.history + [_open.point];
+      List current_solution(){ //#:nodoc:
+        return new List.from(_open.history)..add(_open.point);
       }
 
       @override
       bool step(){ //#:nodoc:
-        if (!_open){
+        if (_open ==null ){//!_open
           return false;
         }
 
-        bool current = _open;
+        Node current = _open;
 
         if (current.point == _b){
           _open = null;
-          _solution = current.history + [_b];
+          _solution = new List.from(current.history)..add(_b);
         }else{
           _open = _open.next;
 
-          _visits[current.point[1]][current.point[0]] |= current.under ? 2 : 1;
+          _visits[current.point.y][current.point.x] |= current.under ? 2 : 1;
 
-          cell = _maze[current.point];
+          var cell = _maze[current.point];
 
-          directions = _maze.potential_exits_at(current.point[0], current.point[1]);
+          List<int> directions = _maze.potential_exits_at(current.point.x, current.point.y);
           directions.forEach((dir){
             var _try = current.under ? (dir << Maze.UNDER_SHIFT) : dir;
             if (cell & _try != 0){
-              point = _move(current.point, dir);
+             Position point = _move(current.point, dir);
               //next unless _maze.valid?(point[0], point[1])
               if (!_maze.valid(point.x, point.y)){
                return;
               }
               var under = ((_maze[point] >> Maze.UNDER_SHIFT) & _maze.opposite(dir) != 0);
-              _add_node(point, under, current.path_cost+1, current.history + [current.point]);
+              _add_node(point, under, current.path_cost+1,new List.from(current.history)..add(current.point));
             }
           });
         }
 
-        return current;
+        return current != null;
       }
 
       //private
 
       _estimate(Position pt){ //#:nodoc:
-        Math.sqrt(Math.pow((_b[0] - pt.x),2)/* **2 */ + Math.pow((_b[1] - pt.y),2) /* **2 */);
+        Math.sqrt(Math.pow((_b.x - pt.x),2)/* **2 */ + Math.pow((_b.y - pt.y),2) /* **2 */);
       }
 
-      _add_node(pt, under, path_cost, history){ //#:nodoc:
-        if (_visits[pt[1]][pt[0]] & (under ? 2 : 1) != 0){
+      _add_node(Position pt,bool under,int path_cost,List history){ //#:nodoc:
+        if (_visits[pt.y][pt.x] & (under ? 2 : 1) != 0){
          return; 
         }
 
         var node = new Node(pt, under, path_cost, _estimate(pt), history);
 
-        if (_open){
-          var p = null , n = _open;
+        if (_open!=null){
+          var p = null;
+          Node n = _open;
 
-          while (n && n < node){
+          while (n!=null && n.compareTo(node)==-1 /*n< node*/){
             p = n;
-            n = n.next();
+            n = n.next;
           }
 
           if (p == null){
@@ -143,7 +148,7 @@ part of theseus.solvers;
           }
 
           //# remove duplicates
-          while (node.next && node.next.point == node.point){
+          while (node.next!=null && node.next.point == node.point){
             node.next = node.next.next;
           }
         }else{
@@ -151,7 +156,7 @@ part of theseus.solvers;
         }
       }
 
-      _move(pt, direction) {//#:nodoc:
-        return [pt[0] + _maze.dx(direction), pt[1] + _maze.dy(direction)];
+      Position _move(Position pt,int direction) {//#:nodoc:
+        return new Position.xy(pt.x + _maze.dx(direction), pt.y + _maze.dy(direction));
       }
     }

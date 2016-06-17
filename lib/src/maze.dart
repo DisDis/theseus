@@ -217,7 +217,7 @@ class MazeOptions{
     Position get exit=>_exit;
     Position _exit;
 
-    List<List> _cells;
+    List<List<int>> _cells;
     
     //# A short-hand method for creating a new maze object and causing it to
     //# be generated, in one step. Returns the newly generated maze.
@@ -321,7 +321,7 @@ class MazeOptions{
     //# Generates the maze if it has not already been generated. This is
     //# essentially the same as calling //#step repeatedly. If a block is given,
     //# it will be called after each step.
-   Maze generate(){//!
+   Maze generate(){//def generate!
       //yield if block_given? while step unless generated?
      while (!_generated) {
        step();
@@ -425,7 +425,7 @@ class MazeOptions{
     //# //#entrance that lies within the maze. If //#entrance is already internal to the
     //# maze, this method returns //#entrance. If //#entrance is _not_ adjacent to any
     //# internal cell, this method returns +nil+.
-    start(){
+      Position start(){
       return adjacent_point(_entrance);
     }
 
@@ -433,8 +433,8 @@ class MazeOptions{
     //# //#exit that lies within the maze. If //#exit is already internal to the
     //# maze, this method returns //#exit. If //#exit is _not_ adjacent to any
     //# internal cell, this method returns +nil+.
-    finish(){
-      adjacent_point(_exit);
+      Position finish(){
+      return adjacent_point(_exit);
     }
 
     //# Returns an array of the possible exits for the cell at the given coordinates.
@@ -652,7 +652,7 @@ class MazeOptions{
     }
 
     //# Returns the change in x implied by the given +direction+.
-    int dx(direction){
+    int dx(int direction){
       switch (direction){
       case E:
       case NE:
@@ -665,7 +665,7 @@ class MazeOptions{
     }
 
     //# Returns the change in y implied by the given +direction+.
-    int dy(direction){
+    int dy(int direction){
       switch (direction){
       case S:
       case SE:
@@ -879,13 +879,13 @@ class MazeOptions{
     //# The default grid should suffice for most maze types, but if a subclass
     //# wants a custom grid, it must override this method. Note that the method
     //# MUST always return an Array of rows, with each row being an Array of cells.
-    List _setup_grid(){ //#:nodoc:
+    List<List<int>> _setup_grid(){ //#:nodoc:
       return new List.generate(height,(_)=>new List.generate(width, (_)=>0));
     }
 
     //# Returns an array of deadends that ought to be braided (removed), based on
     //# the value of the //#braid setting.
-    List _deadends_to_braid(){ //#:nodoc:
+      List<Position> _deadends_to_braid(){ //#:nodoc:
       if (_braid == 0/*.zero?*/){
         return [];
       }
@@ -933,7 +933,7 @@ class MazeOptions{
     _move_symmetrically_in_x(int x,int y,int direction){ //#:nodoc:
       var row_width = _cells[y].length;
       if (direction == direction_under){
-        _cells[y][row_width - x - 1].add(UNDER_SHIFT); //<<= UNDER_SHIFT
+        _cells[y][row_width - x - 1] = (UNDER_SHIFT); //<<= UNDER_SHIFT
       }else{
         _cells[y][row_width - x - 1] |= hmirror(direction);
       }
@@ -941,7 +941,7 @@ class MazeOptions{
 
     _move_symmetrically_in_y(int x,int y,int direction){ //#:nodoc:
       if (direction == direction_under){
-        _cells[_cells.length - y - 1][x].add(UNDER_SHIFT); //<<= UNDER_SHIFT
+        _cells[_cells.length - y - 1][x] = UNDER_SHIFT; //<<= UNDER_SHIFT
       }else{
         _cells[_cells.length - y - 1][x] |= vmirror(direction);
       }

@@ -1,7 +1,7 @@
 library theseus.algorithms;
 
-import "../../theseus.dart";
-import '../../ruby_port.dart' as ruby;
+import "package:theseus/theseus.dart";
+import 'package:theseus/ruby_port.dart' as ruby;
 
 part 'recursive_backtracker.dart';
 part 'base.dart';

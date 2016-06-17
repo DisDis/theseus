@@ -25,7 +25,7 @@ part of theseus;
     //# Eventually, this would be good to generalize somehow, and make available to
     //# the other maze types.
     //#++
-    finish/*!*/(){ //#:nodoc:
+  Position finish/*!*/(){ //#:nodoc:
       //# for symmetrical mazes, if the size of the maze in the direction of reflection is
       //# even, then we have two distinct halves that need to be joined in order for the
       //# maze to be fully connected.
