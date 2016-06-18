@@ -3,8 +3,7 @@ version: 1.0.3
 authors:
 - Jamis Buck <jamis@jamisbuck.org>
 - Igor Demyanov <igor.demyanov@gmail.com>
-description: Theseus port https://github.com/jamis/theseus version 1.0.2. Theseus is a library for generating and solving mazes. It also includes routines for rendering mazes (and their solutions) to both ASCII art, and to PNG image files.
-There is also an included utility for generating mazes from the command-line.
+description: Theseus port https://github.com/jamis/theseus version 1.0.2. Theseus is a library for generating and solving mazes.
 dev_dependencies:
   test: "^0.12.0"
   image: any
