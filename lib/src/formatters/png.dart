@@ -119,7 +119,7 @@ class PNGFormatterOptions{
         //# +:color: metadata from the first path that is set at the given point is
         //# returned. If no path describes the given point, then the value of the
         //# +:cell_color+ option is returned.
-        color_at(pt, [direction = null]) {
+        num color_at(pt, [direction = null]) {
             _paths.forEach((path) {
                 if (direction != null ? path.path(pt, direction) : path
                     .set /*set?*/(pt)) {

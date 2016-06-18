@@ -29,8 +29,6 @@ part of theseus.formatters;
               _draw_cell(canvas, [x, y], maze.points_up(x,y), px, py, maze.getCell(x, y));
             }
           }
-
-          _blob = canvas.to_blob;
         }
 
 
@@ -38,38 +36,48 @@ part of theseus.formatters;
           if (cell == 0) {
             return;
           }
-          var p1 = [x + options.cell_size / 2.0, up ? (y + options.cell_padding) : (y + options.cell_size - options.cell_padding)];
-          var p2 = [x + options.cell_padding, up ? (y + options.cell_size - options.cell_padding) : (y + options.cell_padding)];
-          var p3 = [x + options.cell_size - options.cell_padding, p2[1]];
+          var p1 = new Position.xy(x + options.cell_size / 2.0, up ? (y + options.cell_padding) : (y + options.cell_size - options.cell_padding));
+          var p2 = new Position.xy(x + options.cell_padding, up ? (y + options.cell_size - options.cell_padding) : (y + options.cell_padding));
+          var p3 = new Position.xy(x + options.cell_size - options.cell_padding, p2.y);
 
           _fill_poly(canvas, [p1, p2, p3], color_at(point));
 
           if (cell & (Maze.N | Maze.S) != 0) {
-            clr = color_at(point, (Maze.N | Maze.S));
-            dy = options.cell_padding;
-            sign = (cell & Maze.N != 0) ? -1 : 1;
-            r1, r2 = p2, move(p3, 0, sign*dy);
-            _fill_rect(canvas, r1[0].round, r1[1].round, r2[0].round, r2[1].round, clr);
-            _line(canvas, r1, [r1[0], r2[1]], options.wall_color);
-            _line(canvas, r2, [r2[0], r1[1]], options.wall_color);
+            var clr = color_at(point, (Maze.N | Maze.S));
+            var dy = options.cell_padding;
+            var sign = (cell & Maze.N != 0) ? -1 : 1;
+            //r1, r2 = p2, move(p3, 0, sign*dy);
+            var r1 = p2;
+            var r2 = move(p3, 0, sign*dy);
+            _fill_rect(canvas, r1.x.round(), r1.y.round(), r2.x.round(), r2.y.round(), clr);
+            _line(canvas, r1, new Position.xy(r1.x, r2.y), options.wall_color);
+            _line(canvas, r2, new Position.xy(r2.x, r1.y), options.wall_color);
       }else{
             _line(canvas, p2, p3, options.wall_color);
           }
 
-          dx = options.cell_padding;
+          var dx = options.cell_padding;
           if (cell & ANY_W != 0){
-            r1, r2, r3, r4 = p1, move(p1,-dx,0), move(p2,-dx,0), p2;
+            //r1, r2, r3, r4 = p1, move(p1,-dx,0), move(p2,-dx,0), p2;
+              var r1 = p1;
+              var r2 = move(p1,-dx,0);
+              var r3 = move(p2,-dx,0);
+              var r4 = p2;
             _fill_poly(canvas, [r1, r2, r3, r4], color_at(point, ANY_W));
             _line(canvas, r1, r2, options.wall_color);
             _line(canvas, r3, r4, options.wall_color);
           }
 
           if (cell & Maze.W == 0){
-            line(canvas, p1, p2, options.wall_color)
+            _line(canvas, p1, p2, options.wall_color);
           }
 
           if (cell & ANY_E != 0){
-            r1, r2, r3, r4 = p1, move(p1,dx,0), move(p3,dx,0), p3;
+            //r1, r2, r3, r4 = p1, move(p1,dx,0), move(p3,dx,0), p3;
+              var r1 = p1;
+              var r2 =move(p1,dx,0);
+              var r3 = move(p3,dx,0);
+              var r4 =p3;
             _fill_poly(canvas, [r1, r2, r3, r4], color_at(point, ANY_E));
             _line(canvas, r1, r2, options.wall_color);
             _line(canvas, r3, r4, options.wall_color);

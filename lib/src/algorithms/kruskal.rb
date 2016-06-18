@@ -43,8 +43,8 @@ module Theseus
         @sets = Array.new(@maze.height) { Array.new(@maze.width) { TreeSet.new } }
         @edges = []
 
-        maze.height.times do |y|
-          maze.row_length(y).times do |x|
+        for (int y = 0; y < maze.height; y++) { // maze.height.times do |y|
+          for (int x = 0; x < maze.row_length(y); x++) { //maze.row_length(y).times do |x|
             next unless @maze.valid?(x, y)
             @maze.potential_exits_at(x, y).each do |dir|
               dx, dy = @maze.dx(dir), @maze.dy(dir)

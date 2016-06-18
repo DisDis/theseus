@@ -1,8 +1,8 @@
 part of theseus;
 
 class Position{
-  int x;//[0]
-  int y;//[1]
+  num x;//[0]
+  num y;//[1]
   Position();
   Position dup()=> new Position.xy(x,y);
   Position.xy(this.x,this.y);
