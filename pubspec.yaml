@@ -1,5 +1,6 @@
 name: theseus
 version: 1.0.3
+homepage: https://github.com/DisDis/theseus
 authors:
 - Jamis Buck <jamis@jamisbuck.org>
 - Igor Demyanov <igor.demyanov@gmail.com>
