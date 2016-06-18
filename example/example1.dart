@@ -1,6 +1,5 @@
 import 'package:theseus/theseus.dart';
 import 'package:theseus/src/formatters/formatters.dart' as formatters;
-import 'package:theseus/ruby_port.dart';
 
 main(){
     var mazeOption = new MazeOptions(width: 20, height: 20);
@@ -27,10 +26,9 @@ main(){
 }
 
 void printMaze(Maze maze) {
-//  formatters.ASCIIMode.values.forEach((formatters.ASCIIMode mode){
-    formatters.ASCIIMode mode = formatters.ASCIIMode.unicode;
+  formatters.ASCIIMode.values.forEach((formatters.ASCIIMode mode){
       print("mode: $mode");
       var out = maze.to(FormatType.ascii,mode) as formatters.ASCII;
       print(out.toString());
-//  });
+  });
 }

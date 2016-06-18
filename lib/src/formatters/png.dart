@@ -13,8 +13,6 @@ abstract class PNGCanvas{
   void setBackground(num background);
 
   void setSize(num width, num height);
-
-  dynamic to_blob();
 }
 
 
@@ -92,12 +90,12 @@ class PNGFormatterOptions{
         PNGFormatterOptions get options => _options;
         PNGFormatterOptions _options;
 
-        var _blob;
         List _paths;
         PNGCanvas canvas;
 
 
         PNG(Maze maze, PNGFormatterOptions options) {
+            _options = options;
             canvas = options.canvas;
 //        _options = DEFAULTS.merge(options);
 
@@ -115,11 +113,6 @@ class PNGFormatterOptions{
 //          Path path = maze.new_solver(type: _options.solution.solve().to_path(color: _options.solution_color);
 //          _paths = [path, *_paths];
             }
-        }
-
-        //# Returns the raw PNG data for the formatter.
-        to_blob() {
-            return _blob;
         }
 
         //# Returns the color at the given point by considering all provided paths. The
@@ -181,6 +174,22 @@ class PNGFormatterOptions{
                    // canvas.point(x, y, color);
 //                }
 //            }
+
+            if (x0>x1){
+                var tmp = x0;
+                x0 = x1;
+                x1 = tmp;
+            }
+            if (y0>y1){
+                var tmp = y0;
+                y0 = y1;
+                y1 = tmp;
+            }
+            x0 = x0.ceil();
+            x1 = x1.floor();
+            y0 = y0.ceil();
+            y1 = y1.floor();
+
             canvas.fillRect(x0,y0,x1,y1,color);
         }
 

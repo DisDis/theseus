@@ -42,7 +42,6 @@ part of theseus.formatters;
             }
           }
 
-          _blob = canvas.to_blob();
         }
 
         _draw_octogon_cell(PNGCanvas canvas, point, x, y, cell, metrics){ //#:nodoc:

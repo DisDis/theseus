@@ -42,25 +42,23 @@ part of theseus.formatters;
               _draw_cell(canvas, new Position.xy(x, y), px, py, maze.getCell(x, y));
             }
           }
-
-          _blob = canvas.to_blob();
         }
 
-        _draw_cell(PNGCanvas canvas, Position point, x, y, cell) {//#:nodoc:
+        _draw_cell(PNGCanvas canvas, Position point,num x,num y, cell) {//#:nodoc:
           if (cell == 0) {
               return;
           }
 
           _fill_rect(canvas, x + d1, y + d1, x + d2, y + d2, color_at(point));
 
-          var north = cell & Maze.N == Maze.N;
-          var north_under = (cell >> Maze.UNDER_SHIFT) & Maze.N == Maze.N;
-          var south = cell & Maze.S == Maze.S;
-          var south_under = (cell >> Maze.UNDER_SHIFT) & Maze.S == Maze.S;
-          var west = cell & Maze.W == Maze.W;
-          var west_under = (cell >> Maze.UNDER_SHIFT) & Maze.W == Maze.W;
-          var east = cell & Maze.E == Maze.E;
-          var east_under = (cell >> Maze.UNDER_SHIFT) & Maze.E == Maze.E;
+          bool north = cell & Maze.N == Maze.N;
+          bool north_under = (cell >> Maze.UNDER_SHIFT) & Maze.N == Maze.N;
+          bool south = cell & Maze.S == Maze.S;
+          bool south_under = (cell >> Maze.UNDER_SHIFT) & Maze.S == Maze.S;
+          bool west = cell & Maze.W == Maze.W;
+          bool west_under = (cell >> Maze.UNDER_SHIFT) & Maze.W == Maze.W;
+          bool east = cell & Maze.E == Maze.E;
+          bool east_under = (cell >> Maze.UNDER_SHIFT) & Maze.E == Maze.E;
 
           _draw_vertical(canvas, x, y, 1, north || north_under, !north || north_under, color_at(point, ANY_N));
           _draw_vertical(canvas, x, y + options.cell_size, -1, south || south_under, !south || south_under, color_at(point, ANY_S));
@@ -68,7 +66,7 @@ part of theseus.formatters;
           _draw_horizontal(canvas, x + options.cell_size, y, -1, east || east_under, !east || east_under, color_at(point, ANY_E));
         }
 
-        _draw_vertical(PNGCanvas canvas, x, y, direction, corridor, wall, color){ //#:nodoc:
+        _draw_vertical(PNGCanvas canvas,num x,num y, direction,bool corridor,bool wall, color){ //#:nodoc:
           if (corridor){
             _fill_rect(canvas, x + d1, y, x + d2, y + d1 * direction, color);
             _fill_rect(canvas, x + d1 - w1, y - (w1 * direction), x + d1 + w2, y + (d1 + w2) * direction, options.wall_color);
@@ -80,7 +78,7 @@ part of theseus.formatters;
           }
         }
 
-        _draw_horizontal(PNGCanvas canvas, x, y, direction, corridor, wall, color){ //#:nodoc:
+        _draw_horizontal(PNGCanvas canvas,num x,num y,num direction,bool corridor,bool wall, color){ //#:nodoc:
           if (corridor){
             _fill_rect(canvas, x, y + d1, x + d1 * direction, y + d2, color);
             _fill_rect(canvas, x - (w1 * direction), y + d1 - w1, x + (d1 + w2) * direction, y + d1 + w2, options.wall_color);

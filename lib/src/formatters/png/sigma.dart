@@ -32,7 +32,6 @@ part of theseus.formatters;
             }
           }
 
-          _blob = canvas.to_blob;
         }
 
         //private
