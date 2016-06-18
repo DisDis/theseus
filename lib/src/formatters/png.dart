@@ -1,5 +1,22 @@
 part of theseus.formatters;
 
+abstract class PNGCanvas{
+    int get width;
+    int get height;
+
+  void line(num x1, num y1, num x2, num y2,num color);
+
+  void fillRect(num x0, num y0, num x1, num y1,num color);
+
+  void point(num x, num y,num color);
+
+  void setBackground(num background);
+
+  void setSize(num width, num height);
+
+  dynamic to_blob();
+}
+
 
 class PNGFormatterOptions{
   //# The +options+ must be a hash of any of the following options:
@@ -38,7 +55,7 @@ class PNGFormatterOptions{
     int cell_padding   = 1;
     solvers.Base solution      = null;
 
-
+    PNGCanvas canvas;
   List paths = [];
 }
 //require 'chunky_png'
@@ -77,9 +94,11 @@ class PNGFormatterOptions{
 
         var _blob;
         List _paths;
+        PNGCanvas canvas;
 
 
         PNG(Maze maze, PNGFormatterOptions options) {
+            canvas = options.canvas;
 //        _options = DEFAULTS.merge(options);
 
 //        [#background, #wall_color, #cell_color, #solution_color].forEach((c){
@@ -118,7 +137,7 @@ class PNGFormatterOptions{
             return _options.cell_color;
         }
 
-        //# Returns a new 2-tuple (x2,y2), where x2 is point[0] + dx, and y2 is point[1] + dy.
+        //# Returns a new 2-tuple (x2,y2), where x2 is point[0] + dx, and y2 is point.y + dy.
         Position move(Position point, dx, dy) {
             return new Position.xy(point.x + dx, point.y + dy);
         }
@@ -139,38 +158,37 @@ class PNGFormatterOptions{
         //# Draws a line from +p1+ to +p2+ on the given canvas object, in the given
         //# color. The coordinates of the given points are clamped (naively) to lie
         //# within the canvas' bounds.
-        _line(canvas, p1, p2, color) {
+        _line(PNGCanvas canvas,Position p1,Position p2, color) {
             canvas.line(
-                clamp(p1[0].round, 0, canvas.width - 1),
-                clamp(p1[1].round, 0, canvas.height - 1),
-                clamp(p2[0].round, 0, canvas.width - 1),
-                clamp(p2[1].round, 0, canvas.height - 1),
+                clamp(p1.x.round(), 0, canvas.width - 1),
+                clamp(p1.y.round(), 0, canvas.height - 1),
+                clamp(p2.x.round(), 0, canvas.width - 1),
+                clamp(p2.y.round(), 0, canvas.height - 1),
                 color);
         }
 
         //# Fills the rectangle defined by the given coordinates with the given color.
         //# The coordinates are clamped to lie within the canvas' bounds.
-        _fill_rect(canvas, x0, y0, x1, y1, color) {
+        _fill_rect(PNGCanvas canvas, x0, y0, x1, y1, color) {
             x0 = clamp(x0, 0, canvas.width - 1);
             y0 = clamp(y0, 0, canvas.height - 1);
             x1 = clamp(x1, 0, canvas.width - 1);
             y1 = clamp(y1, 0, canvas.height - 1);
-            for (int x = math.min(x0, x1).ceil(); x < math.max(x0, x1).floor();
-            x++) {
+//            for (int x = math.min(x0, x1).ceil(); x < math.max(x0, x1).floor();x++) {
                 // [x0, x1].min.ceil.upto([x0, x1].max.floor) do |x|{
-                for (int y = math.min(y0, y1).ceil(); y <
-                    math.max(y0, y1).floor(); y++) {
+//                for (int y = math.min(y0, y1).ceil(); y < math.max(y0, y1).floor(); y++) {
                     //   [y0, y1].min.ceil.upto([y0, y1].max.floor) do |y|{
-                    canvas.point(x, y, color);
-                }
-            }
+                   // canvas.point(x, y, color);
+//                }
+//            }
+            canvas.fillRect(x0,y0,x1,y1,color);
         }
 
         //# Fills the polygon defined by the +points+ array, with the given +color+.
         //# Each element of +points+ must be a 2-tuple describing a vertex of the
         //# polygon. It is assumed that the polygon is closed. All points are
         //# clamped (naively) to lie within the canvas' bounds.
-        _fill_poly(canvas, List<Position> points, color) {
+        _fill_poly(PNGCanvas canvas, List<Position> points, color) {
             var min_y = 1000000;
             var max_y = -1000000;
             points.forEach((Position xy) {

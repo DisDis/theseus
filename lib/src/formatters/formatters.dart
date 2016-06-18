@@ -12,3 +12,6 @@ part 'ascii/sigma.dart';
 part 'ascii/delta.dart';
 part 'png.dart';
 part 'png/orthogonal.dart';
+//part 'png/sigma.dart';
+//part 'png/delta.dart';
+//part 'png/upsilon.dart';
