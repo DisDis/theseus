@@ -23,14 +23,14 @@ part of theseus.solvers;
       //# Create a new solver instance for the given maze, using the given
       //# start (+a+) and finish (+b+) points. The solution will not be immediately
       //# generated; to do so, use the //#step or //#solve methods.
-      Base(Maze maze, [a, b]){
+      Base(Maze maze, [Position a,Position b]){
         _maze = maze;
-        if (a == null){
-          a = maze.start();
+        if (a == null) {
+            a = maze.start();
         }
-        if (b == null){
-                  b = maze.finish();
-                }
+        if (b == null) {
+            b = maze.finish();
+        }
         _a = a;
         _b = b;
         _solution = null;
@@ -38,7 +38,7 @@ part of theseus.solvers;
 
       //# Returns +true+ if the solution has been generated.
       bool get solved/*?*/{
-        return solution != null;
+        return _solution != null;
       }
 
       //# Returns the solution path as an array of 2-tuples, beginning with //#a and
@@ -78,18 +78,18 @@ part of theseus.solvers;
 
       //# Returns the solution (or, if the solution is not yet fully generated,
       //# the current_solution) as a Theseus::Path object.
-      Path to_path(options/*={}*/){
+      Path to_path(PathOptions options/*={}*/){
         var path = _maze.new_path(options);
         var prev = _maze.entrance;
 
         var how;
-        (_solution!=null?_solution: current_solution()).forEach((pt){
+        (_solution!=null?_solution: current_solution()).forEach((Position pt){
           how = path.link(prev, pt);
           path.set(pt, how);
           prev = pt;
         });
 
-        how = path.link(prev, _maze.exit);
+        how = path.link(prev, _maze.finish());//_maze.exit
         path.set(_maze.exit, how);
 
         return path;

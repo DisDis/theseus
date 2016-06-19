@@ -3,6 +3,10 @@ part of theseus;
 enum LinkType{
   over,under
 }
+
+class PathOptions{
+  int color;
+}
 //module Theseus
   //# The Path class is used to represent paths (and, generally, regions) within
   //# a maze. Arbitrary metadata can be associated with these paths, as well.
@@ -13,30 +17,32 @@ enum LinkType{
     //# Represents the exit paths from each cell in the Path. This is a Hash of bitfields,
     //# and should be treated as read-only.
     Map get paths=>_paths;
-    Map _paths;
+    Map<Position, int> _paths;
 
     //# Represents the cells within the Path. This is a Hash of bitfields, with bit 1
     //# meaning the primary plane for the cell is set for this Path, and bit 2 meaning
     //# the under plane for the cell is set.
     Map get cells=>_cells;
-    Map _cells;
+    Map <Position, int> _cells;
 
+    int get color=>options.color;
+
+    final PathOptions options;
     //# Instantiates a new plane for the given +maze+ instance, and with the given +meta+
     //# data. Initially, the path is empty.
-    Path(Maze maze, meta/*={}*/){
+    Path(Maze maze,PathOptions this.options/*={}*/){
       _maze = maze;
       _paths = new Map();
       _cells = new Map();
-      _meta = meta;
     }
     
     Maze _maze;
-    dynamic _meta;
-
-    //# Returns the metadata for the given +key+.
-    operator [](key){
-      return _meta[key];
-    }
+//    dynamic _meta;
+//
+//    //# Returns the metadata for the given +key+.
+//    operator [](key){
+//      return _meta[key];
+//    }
 
     //# Marks the given +point+ as occupied in this path. If +how+ is +:over+, the
     //# point is set in the primary plane. Otherwise, it is set in the under plane.
@@ -46,37 +52,48 @@ enum LinkType{
     //#
     //#   how = path.link(from, to)
     //#   path.set(to, how)
-    void set(point,[LinkType how = LinkType.over]) {
-      _cells[point] |= (how == LinkType.over ? 1 : 2);
+    void set(Position point,[LinkType how = LinkType.over]) {
+      //TODO: check!
+      //_cells[point] |= (how == LinkType.over ? 1 : 2);
+      _cells[point] = (how == LinkType.over ? 1 : 2);
     }
     //# Returns true if the given point is occuped in the path, for the given plane.
     //# If +how+ is +:over+, the primary plane is queried. Otherwise, the under
     //# plane is queried.
-//    bool set(point,LinkType how = LinkType.over){
-//      return _cells[point] & (how == LinkType.over ? 1 : 2) != 0;
-//    }
+    bool isSet(Position point,[LinkType how = LinkType.over]){
+      var tmp = _cells[point];
+      if (tmp == null){
+        tmp = 0;
+      }
+      //TODO: check!
+      return tmp & (how == LinkType.over ? 1 : 2) != 0;
+    }
 
     //# Creates a link between the two given points. The points must be adjacent.
     //# If the corresponding passage in the maze moves into the under plane as it
     //# enters +to+, this method returns +:under+. Otherwise, it returns +:over+.
     //#
     //# If the two points are not adjacent, no link is created.
-    LinkType link(from, to){
+    LinkType link(Position from,Position to){
       var direction = _maze.relative_direction(from, to);
       if (direction != null){
         var opposite = _maze.opposite(direction);
 
-        if (_maze.valid(from[0], from[1])){
-          if (_maze[new Position.xy(from[0], from[1])] & direction == 0){
+        if (_maze.valid(from.x, from.y)){
+          if (_maze[from] & direction == 0){
             direction <<= Maze.UNDER_SHIFT ;
           }
-          _paths[from] |= direction;
+          //TODO: check!
+//          _paths[from] |= direction;
+          _paths[from] = direction;
         }
 
-        if (_maze[new Position.xy(to[0], to[1])] & opposite == 0){
+        if (_maze[to] & opposite == 0){
           opposite <<= Maze.UNDER_SHIFT;
         }
-        _paths[to] |= opposite;
+
+        //TODO: check!
+        _paths[to] = opposite; // _paths[to] |= opposite
 
         return (opposite & Maze.UNDER == 0) ? LinkType.over : LinkType.under;
       }
@@ -88,18 +105,25 @@ enum LinkType{
     //# Path instance) to the current Path object. The metadata from the parameter
     //# is not copied.
     add_path(Path path){
-      path.paths.forEach((pt, value) {
-        _paths[pt] |= value;
+      path.paths.forEach((Position pt, value) {
+        //TODO: check!
+        _paths[pt] = value; // _paths[pt] |= value;
       });
 
-      path.cells.forEach((pt, value) {
-        _cells[pt] |= value;
+      path.cells.forEach((Position pt, value) {
+//        _cells[pt] |= value;
+        //TODO: check!
+        _cells[pt] = value;
       });
     }
 
     //# Returns true if there is a path from the given point, in the given direction.
-    bool path(point, direction){
-      return _paths[point] & direction != 0;
+    bool path(Position point, direction){
+      var tmp = _paths[point];
+      if (tmp == null){
+        tmp = 0;
+      }
+      return tmp & direction != 0;
     }
   }
 //}

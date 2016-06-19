@@ -1,11 +1,33 @@
 part of theseus;
 
-class Position{
-  num x;//[0]
-  num y;//[1]
-  Position();
-  Position dup()=> new Position.xy(x,y);
-  Position.xy(this.x,this.y);
+class Position extends Object {
+    num x;
+
+    //[0]
+    num y;
+
+    //[1]
+    Position();
+
+    Position dup() => new Position.xy(x, y);
+
+    Position.xy(this.x, this.y);
+
+    @override
+    int get hashCode => x * 31 + y;
+
+    bool operator ==(other) {
+        if (identical(this, other)) {
+            return true;
+        }
+        if (other is Position) {
+            return other.x == this.x && other.y == this.y;
+        }
+        return false;
+    }
+
+    @override
+    String toString() => "(x:$x, y:$y)";
 }
 
 enum SymmetryType {
@@ -339,7 +361,7 @@ class MazeOptions{
     //#   path = maze.new_path(color: 0xff7fffff)
     //#   path.set([5,5])
     //#   maze.to(:png, paths: [path])
-   Path new_path(meta/*={}*/){
+   Path new_path(PathOptions meta/*={}*/){
       return new Path(this, meta);
    }
 
@@ -748,40 +770,40 @@ class MazeOptions{
 
     //# Returns the direction of +to+ relative to +from+. +to+ and +from+
     //# are both points (2-tuples).
-    int relative_direction(from, to){
+    int relative_direction(Position from,Position to){
       //# first, look for the case where the maze wraps, and from and to
       //# are on opposite sites of the grid.
-      if (wrap_x && from[1] == to[1] && (from[0] == 0 || to[0] == 0) && (from[0] == _width-1 || to[0] == _width-1)){
-        if (from[0] < to[0]){
+      if (wrap_x && from.y == to.y && (from.x == 0 || to.x == 0) && (from.x == _width-1 || to.x == _width-1)){
+        if (from.x < to.x){
           return W;
         }else{
           return E;
         }
-      }else if (wrap_y && from[0] == to[0] && (from[1] == 0 || to[1] == 0) && (from[1] == _height-1 || to[1] == _height-1)){
-        if (from[1] < to[1]){
+      }else if (wrap_y && from.x == to.x && (from.y == 0 || to.y == 0) && (from.y == _height-1 || to.y == _height-1)){
+        if (from.y < to.y){
           return N;
         }else{
           return S;
         }
-      }else if (from[0] < to[0]){
-        if (from[1] < to[1]){
+      }else if (from.x < to.x){
+        if (from.y < to.y){
           return SE;
-        }else if (from[1] > to[1]){
+        }else if (from.y > to.y){
           return NE;
         }else{
           return E;
         }
-      }else if (from[0] > to[0]) {
-        if (from[1] < to[1]){
+      }else if (from.x > to.x) {
+        if (from.y < to.y){
           return SW;
-        }else if (from[1] > to[1]){
+        }else if (from.y > to.y){
           return NW;
         }else{
           return W;
         }
-      }else if (from[1] < to[1]){
+      }else if (from.y < to.y){
         return S;
-      }else if (from[1] > to[1]){
+      }else if (from.y > to.y){
         return N;
       }else{
         //# same point!

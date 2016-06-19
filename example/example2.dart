@@ -3,6 +3,7 @@ import 'package:theseus/src/formatters/formatters.dart' as formatters;
 import 'package:image/image.dart';
 import 'dart:io' as Io;
 import 'dart:math' as math;
+import 'package:theseus/src/solvers/solvers.dart' as solvers;
 
 main(){
     var mazeOption = new MazeOptions(width: 20, height: 20);
@@ -20,6 +21,10 @@ main(){
     pngSetting.wall_color = 0XFF000000;
     pngSetting.background = 0XFFFFFFFF;
     pngSetting.cell_size = 30;
+//    solvers.Astar solve = new solvers.Astar(orthogonalMaze);
+//    solve.solve();
+//    var path = solve.to_path(new PathOptions()..color=pngSetting.solution_color);
+//    pngSetting.paths = [path];
     orthogonalMaze.to(FormatType.png,pngSetting);
     Image image = icanvas.image;
     List<int> png = new PngEncoder().encodeImage(image);

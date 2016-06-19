@@ -72,7 +72,7 @@ part of theseus.solvers;
       Node _open;
       List<List<int>> _visits;
 
-      Astar(Maze maze/*, a=maze.start, b=maze.finish*/):super(maze,maze.start,maze.finish){ //#:nodoc:
+      Astar(Maze maze/*, a=maze.start, b=maze.finish*/):super(maze,maze.start(),maze.finish()){ //#:nodoc:
         _open = new Node(_a, false, 0, _estimate(_a), []);
         _visits = new List.generate(_maze.height,(_)=>new List.generate(_maze.width,(_)=> 0));
       }
@@ -119,8 +119,8 @@ part of theseus.solvers;
 
       //private
 
-      _estimate(Position pt){ //#:nodoc:
-        Math.sqrt(Math.pow((_b.x - pt.x),2)/* **2 */ + Math.pow((_b.y - pt.y),2) /* **2 */);
+      int _estimate(Position pt){ //#:nodoc:
+        return Math.sqrt(Math.pow((_b.x - pt.x),2)/* **2 */ + Math.pow((_b.y - pt.y),2) /* **2 */).toInt();
       }
 
       _add_node(Position pt,bool under,int path_cost,List<Position> history){ //#:nodoc:

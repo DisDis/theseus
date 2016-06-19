@@ -54,7 +54,7 @@ class PNGFormatterOptions{
     solvers.Base solution      = null;
 
     PNGCanvas canvas;
-  List paths = [];
+  List<Path> paths = [];
 }
 //require 'chunky_png'
 //
@@ -90,7 +90,7 @@ class PNGFormatterOptions{
         PNGFormatterOptions get options => _options;
         PNGFormatterOptions _options;
 
-        List _paths;
+        List<Path> _paths;
         PNGCanvas canvas;
 
 
@@ -119,13 +119,15 @@ class PNGFormatterOptions{
         //# +:color: metadata from the first path that is set at the given point is
         //# returned. If no path describes the given point, then the value of the
         //# +:cell_color+ option is returned.
-        num color_at(pt, [direction = null]) {
-            _paths.forEach((path) {
+        num color_at(Position pt, [direction = null]) {
+            //_paths.forEach((Path path)
+            for (Path path in _paths)
+            {
                 if (direction != null ? path.path(pt, direction) : path
-                    .set /*set?*/(pt)) {
+                    .isSet(pt)) {
                     return path.color;
                 }
-            });
+            };
 
             return _options.cell_color;
         }
