@@ -1,10 +1,14 @@
 part of theseus.formatters;
 
-class Metrics{
+class Metrics {
   final num size;
-  num s4;
-  num inc;
-  Metrics({this.size});
+  final num s4;
+  final num inc;
+
+  Metrics(PNGFormatterOptions options, {num size})
+      :this.size = size,
+        this.s4 = size / 4.0,
+        this.inc = 3 * options.cell_size / 4.0;
 }
 //require 'theseus/formatters/png'
 //
@@ -31,10 +35,7 @@ class Metrics{
           canvas.setBackground(options.background);
           canvas.setSize(width, height);
 
-          Metrics metrics = new Metrics(
-              size: options.cell_size - options.cell_padding * 2);
-          metrics.s4 = metrics.size / 4.0;
-          metrics.inc = 3 * options.cell_size / 4.0;
+          Metrics metrics = new Metrics(options, size: options.cell_size - options.cell_padding * 2);
 
           for (int y = 0; y < maze.height; y++) {
             var py = options.outer_padding + y * metrics.inc;
