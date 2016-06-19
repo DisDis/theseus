@@ -46,6 +46,7 @@ part of theseus;
          return new formatters.ASCIIUpsilon(this, options);
        } 
       else if (format == FormatType.png) {
+        return new formatters.PNGUpsilon(this, options);
          //Formatters::PNG.const_get(type).new(self, options).to_blob
       }
        else

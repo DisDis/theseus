@@ -50,6 +50,7 @@ part of theseus;
             return new formatters.ASCIIDelta(this, options);
         }
         else if (format == FormatType.png) {
+            return new formatters.PNGDelta(this, options);
             //Formatters::PNG.const_get(type).new(self, options).to_blob
         }
         else {

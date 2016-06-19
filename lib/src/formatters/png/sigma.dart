@@ -36,9 +36,9 @@ part of theseus.formatters;
 
         //private
 // any = proc { |x| x | (x << Maze.UNDER_SHIFT) };
-        num any(num x)=> x | (x << Maze.UNDER_SHIFT);
+        int any(int x)=> x | (x << Maze.UNDER_SHIFT);
 
-        _draw_cell(PNGCanvas canvas,Position point,bool shifted,num x,num y,num cell) {
+        _draw_cell(PNGCanvas canvas,Position point,bool shifted,num x,num y,int cell) {
             if (cell == 0) {
                 return;
             }
