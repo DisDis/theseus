@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3+1
+
+- Fix all PNG formatters
+
 ## 1.0.3
 
 - Migrate to test package
