@@ -185,8 +185,8 @@ main(){
   test("step_should_populate_current_cell_and_next_cell",(){
     OrthogonalMaze maze = /*Theseus::*/new OrthogonalMaze(new MazeOptions(width: 10));
 
-    var cx = maze.x;
-    var cy = maze.y;
+    var cx = maze.algorithm.x;
+    var cy = maze.algorithm.y;
     expect(true,equals(cx >= 0 && cx < maze.width));
     expect(true,equals(cy >= 0 && cy < maze.height));
     expect(0,equals(maze.getCell(cx, cy)));
@@ -199,7 +199,7 @@ main(){
     var movePos = maze.move(cx, cy, direction);
     var nx = movePos.x, ny = movePos.y;
     expect([nx, ny],isNot(equals([cx, cy])));
-    expect([nx,ny], equals([maze.x, maze.y]));
+    expect([nx,ny], equals([maze.algorithm.x, maze.algorithm.y]));
 
     expect(maze.opposite(direction),equals(maze.getCell(nx, ny)));
   });

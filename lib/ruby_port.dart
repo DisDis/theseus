@@ -4,11 +4,11 @@ import 'dart:math' as math;
 /**
  * if returned true then loop break
  */
-typedef bool EachWithIndexCallback(item,int index);
+typedef bool EachWithIndexCallback<V>(V item,int index);
 
 
 
-bool each_with_index(Iterable array,EachWithIndexCallback callback){
+bool each_with_index<V>(Iterable array,EachWithIndexCallback<V> callback){
   int index= 0;
   return array.any((item){
     if (callback(item,index)==true){

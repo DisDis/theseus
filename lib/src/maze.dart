@@ -941,7 +941,7 @@ class MazeOptions{
     //# Calculate the default exit, by looking for the lower-rightmost point.
     Position _default_exit(){ //#:nodoc:
       Position result = new Position.xy(0, 0); //# if every cell is masked, then 0,0 is as good as any!
-     ruby.each_with_index(_cells.reversed, (List row, y){//_cells.reverse.each_with_index do |row, y|
+     ruby.each_with_index<List>(_cells.reversed, (List row, y){//_cells.reverse.each_with_index do |row, y|
         var ry = _cells.length - y - 1;
             return ruby.each_with_index(row.reversed ,(cell, x){ //row.reverse.each_with_index do |cell, x|{
           var rx = row.length - x - 1;

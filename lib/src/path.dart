@@ -16,13 +16,13 @@ class PathOptions{
   class Path{
     //# Represents the exit paths from each cell in the Path. This is a Hash of bitfields,
     //# and should be treated as read-only.
-    Map get paths=>_paths;
+    Map<Position, int> get paths=>_paths;
     Map<Position, int> _paths;
 
     //# Represents the cells within the Path. This is a Hash of bitfields, with bit 1
     //# meaning the primary plane for the cell is set for this Path, and bit 2 meaning
     //# the under plane for the cell is set.
-    Map get cells=>_cells;
+    Map <Position, int> get cells=>_cells;
     Map <Position, int> _cells;
 
     int get color=>options.color;
