@@ -32,7 +32,7 @@ class BacktrackerStackItem{
       final BacktrackerStackItem FAIL_POSITION = new BacktrackerStackItem(null,null);
       
      Position step(){//#:nodoc:
-        if (_stack.length ==1 && _stack[0] == FAIL_POSITION/*[:fail]*/){
+        /*if (_stack.length ==1 && _stack[0] == FAIL_POSITION/*[:fail]*/){
           return null;//false;
         }else if (_stack.isEmpty){
           _stack.add(FAIL_POSITION);
@@ -86,6 +86,7 @@ class BacktrackerStackItem{
               return p.dup();
             }
           }
-        }
+        }*/
+        throw UnimplementedError('TODO');
       }
     }
