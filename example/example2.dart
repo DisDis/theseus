@@ -5,7 +5,7 @@ import 'dart:io' as Io;
 import 'dart:math' as math;
 import 'package:theseus/src/solvers/solvers.dart' as solvers;
 
-main(){
+void main(){
     var mazeOption = new MazeOptions(width: 20, height: 20);
     //srand(14);
     Maze orthogonalMaze = new OrthogonalMaze(mazeOption);
@@ -25,7 +25,7 @@ main(){
 //    solve.solve();
 //    var path = solve.to_path(new PathOptions()..color=pngSetting.solution_color);
 //    pngSetting.paths = [path];
-    orthogonalMaze.to(FormatType.png,pngSetting);
+    orthogonalMaze.to<formatters.PNGOrthogonal,formatters.PNGFormatterOptions>(FormatType.png,pngSetting);
     Image image = icanvas.image;
     List<int> png = new PngEncoder().encodeImage(image);
     new Io.File('output/maze.png').writeAsBytesSync(png);
@@ -34,7 +34,7 @@ main(){
 void printMaze(Maze maze) {
     formatters.ASCIIMode mode = formatters.ASCIIMode.unicode;
     print("mode: $mode");
-    var out = maze.to(FormatType.ascii,mode) as formatters.ASCII;
+    var out = maze.to<formatters.ASCII,formatters.ASCIIMode>(FormatType.ascii,mode);
     print(out.toString());
 }
 
@@ -75,22 +75,22 @@ class ImageCanvas extends formatters.PNGCanvas{
 
     @override
     void point(num x, num y, num color) {
-        image.setPixel(x,y, color);
+        image.setPixel(x.toInt(),y.toInt(), color.toInt());
     }
 
     @override
     void setBackground(num value) {
         background = value;
         if (image!=null){
-            image.fill(background);
+            image.fill(background.toInt());
         }
     }
 
     @override
     void setSize(num w, num h) {
-        this.width = w;
-        this.height = h;
+        this.width = w.toInt();
+        this.height = h.toInt();
         image = new Image(width, height);
-        image.fill(background);
+        image.fill(background.toInt());
     }
 }

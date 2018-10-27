@@ -45,12 +45,12 @@ part of theseus;
     }
   
     @override
-    to(FormatType format, [options]) {
+    V to<V, P>(FormatType format, [P options]) {
         if (format == FormatType.ascii) {
-            return new formatters.ASCIIDelta(this, options);
+            return new formatters.ASCIIDelta(this) as V;
         }
         else if (format == FormatType.png) {
-            return new formatters.PNGDelta(this, options);
+            return new formatters.PNGDelta(this, options as formatters.PNGFormatterOptions) as V;
             //Formatters::PNG.const_get(type).new(self, options).to_blob
         }
         else {

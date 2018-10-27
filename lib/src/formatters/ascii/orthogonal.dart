@@ -89,11 +89,11 @@ enum ASCIIMode{
           }
         }
 
-        _draw_plain_cell(Maze maze,int x,int y){ //#:nodoc:
+        void _draw_plain_cell(Maze maze,int x,int y){ //#:nodoc:
           var c = maze.getCell(x, y);
           if (c == 0){
-            return ;
-          };
+            return;
+          }
           var px = x * 2;
           var py = y;
 
@@ -133,7 +133,7 @@ enum ASCIIMode{
           }
         }
 
-        final List UTF8_SPRITES = [
+        static final List<List<String>> UTF8_SPRITES = [
           ["   ", "   "], //# " "
           ["│ │", "└─┘"], //# "╵"
           ["┌─┐", "│ │"], //# "╷"
@@ -152,11 +152,11 @@ enum ASCIIMode{
           ["┘ └", "┐ ┌"]  //# "┼"
         ];
 
-        _draw_unicode_cell(Maze maze,int x,int y){ //#:nodoc:
+        void _draw_unicode_cell(Maze maze,int x,int y){ //#:nodoc:
           var cx = 3 * x, cy = 2 * y;
           var cell = maze.getCell(x, y);
 
-          ruby.each_with_index(UTF8_SPRITES[cell & Maze.PRIMARY], (row, sy){
+          ruby.each_with_index<String>(UTF8_SPRITES[cell & Maze.PRIMARY], (row, sy){
             for(int sx = 0 ; sx < row.length ; sx++){
               var char = row[sx];
               setCell(cx+sx, cy+sy,char);
@@ -188,7 +188,7 @@ enum ASCIIMode{
 
         final UTF8_LINES = [" ", "╵", "╷", "│", "╶", "└", "┌", "├", "╴", "┘", "┐", "┤", "─", "┴", "┬", "┼"];
 
-        _draw_line_cell(maze, x, y){ //#:nodoc:
+        void _draw_line_cell(Maze maze,int x,int y){ //#:nodoc:
           setCell(x, y,UTF8_LINES[maze.getCell(x, y) & Maze.PRIMARY]);
         }
       }

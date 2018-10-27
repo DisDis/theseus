@@ -57,8 +57,8 @@ part of theseus;
     //# E is on a line with NW, so AXIS_MAP[false][E] returns NW (and vice versa).
     //# This is used in the weaving algorithms to determine which direction an
     //# UNDER passage moves as it passes under a cell.
-    Map<bool,Map> AXIS_MAP = {
-      false : {
+    static final Map<bool,Map<int,int>> AXIS_MAP = {
+      false : <int,int>{
         Maze.N : Maze.S,
         Maze.S : Maze.N,
             Maze.E : Maze.NW,
@@ -67,7 +67,7 @@ part of theseus;
             Maze.NE : Maze.W
       },
 
-      true : {
+      true :  <int,int>{
         Maze.N : Maze.S,
         Maze.S : Maze.N,
         Maze.W : Maze.SE,
@@ -79,7 +79,7 @@ part of theseus;
 
     //# given a path entering in +entrance_direction+, returns the side of the
     //# cell that it would exit if it passed in a straight line through the cell.
-    _exit_wound(int entrance_direction,bool shifted){ //#:nodoc:
+    int _exit_wound(int entrance_direction,bool shifted){ //#:nodoc:
       //# if moving W into the cell, then entrance_direction == W. To determine
       //# the axis within the new cell, we reverse it to find the wall within the
       //# cell that was penetrated (opposite(W) == E), and then
@@ -97,7 +97,8 @@ part of theseus;
 
       var pass_thru = _exit_wound(direction, thru_x % 2 != 0);
       var movePos = move(thru_x, thru_y, pass_thru);
-      var out_x = movePos.x, out_y = movePos.y;
+      var out_x = movePos.x.toInt();
+      var out_y = movePos.y.toInt();
       return valid(out_x, out_y) && _cells[out_y][out_x] == 0;
     }
 
@@ -110,17 +111,18 @@ part of theseus;
       apply_move_at(to_x, to_y, AXIS_MAP[shifted][pass_thru] << Maze.UNDER_SHIFT);
 
       var movePos = move(to_x, to_y, pass_thru);
-      var nx = movePos.x, ny = movePos.y;
+      var nx = movePos.x.toInt();
+      var ny = movePos.y.toInt();
       return [nx, ny, pass_thru];
     }
     
     @override
-      to(FormatType format, [options]) {
+    V to<V, P>(FormatType format, [P options]) {
         if (format == FormatType.ascii) {
-             return new formatters.ASCIISigma(this, options);
+             return new formatters.ASCIISigma(this) as V;
            } 
       else if (format == FormatType.png) {
-          return new formatters.PNGSigma(this, options);
+          return new formatters.PNGSigma(this, options as formatters.PNGFormatterOptions) as V;
              //Formatters::PNG.const_get(type).new(self, options).to_blob
       }
            else

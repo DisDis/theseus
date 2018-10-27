@@ -69,8 +69,8 @@ part of theseus.solvers;
             yield s;
           }
         }else{
-          var s;
-          while (s = step()!=null){
+          Position<num> s;
+          while ((s = step()) != null){
             yield s;
           }
         }
@@ -82,7 +82,7 @@ part of theseus.solvers;
         var path = _maze.new_path(options);
         var prev = _maze.entrance;
 
-        var how;
+        LinkType how;
         (_solution!=null?_solution: current_solution()).forEach((Position pt){
           how = path.link(prev, pt);
           path.set(pt, how);

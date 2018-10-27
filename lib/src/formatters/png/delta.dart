@@ -25,23 +25,23 @@ part of theseus.formatters;
               canvas.setSize(width, height);
 
               for (int y = 0; y < maze.height; y++) {
-                  var py = options.outer_padding + y * options.cell_size;
+                  num py = options.outer_padding + y * options.cell_size;
                   for (int x = 0; x < maze.row_length(y); x++) {
-                      var px = options.outer_padding +
+                      num px = options.outer_padding +
                           x * options.cell_size / 2.0;
-                      _draw_cell(canvas, [x, y], maze.points_up(x, y), px, py,
+                      _draw_cell(canvas, new Position.xy(x, y), maze.points_up(x, y), px, py,
                           maze.getCell(x, y));
                   }
               }
           }
 
 
-          _draw_cell(PNGCanvas canvas, point, up, x, y, cell) {
+          void _draw_cell(PNGCanvas canvas,Position point,bool up,num x,num y,int cell) {
               //#:nodoc:
               if (cell == 0) {
                   return;
               }
-              var p1 = new Position.xy(x + options.cell_size / 2.0,
+              var p1 = new Position<num>.xy(x + options.cell_size / 2.0,
                   up ? (y + options.cell_padding) : (y + options.cell_size -
                       options.cell_padding));
               var p2 = new Position.xy(x + options.cell_padding,
@@ -76,7 +76,7 @@ part of theseus.formatters;
                   var r2 = move(p1, -dx, 0);
                   var r3 = move(p2, -dx, 0);
                   var r4 = p2;
-                  _fill_poly(canvas, [r1, r2, r3, r4], color_at(point, ANY_W));
+                  _fill_poly(canvas, [r1, r2, r3, r4], color_at(point, ANY_W).toInt());
                   _line(canvas, r1, r2, options.wall_color);
                   _line(canvas, r3, r4, options.wall_color);
               }
@@ -91,7 +91,7 @@ part of theseus.formatters;
                   var r2 = move(p1, dx, 0);
                   var r3 = move(p3, dx, 0);
                   var r4 = p3;
-                  _fill_poly(canvas, [r1, r2, r3, r4], color_at(point, ANY_E));
+                  _fill_poly(canvas, [r1, r2, r3, r4], color_at(point, ANY_E).toInt());
                   _line(canvas, r1, r2, options.wall_color);
                   _line(canvas, r3, r4, options.wall_color);
               }

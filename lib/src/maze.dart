@@ -1,12 +1,12 @@
 part of theseus;
 
-class Position extends Object {
-    num x;
-
+class Position<T extends num> extends Object {
     //[0]
-    num y;
-
+    T x;
     //[1]
+    T y;
+
+
     Position();
 
     Position dup() => new Position.xy(x, y);
@@ -14,9 +14,9 @@ class Position extends Object {
     Position.xy(this.x, this.y);
 
     @override
-    int get hashCode => x * 31 + y;
+    int get hashCode => x.toInt() * 31 + y.toInt();
 
-    bool operator ==(other) {
+    bool operator ==(dynamic other) {
         if (identical(this, other)) {
             return true;
         }
@@ -48,9 +48,11 @@ class MazeOptions{
       //#                want to see individual maze types for more info.
        
        */
-  final int width;
+  //FIXIT: final
+  int width;
       //# [:]      The number of rows in the maze.
-  final int height;
+  //FIXIT: final
+  int height;
       //# [:]   The maze algorithm to use. This should be a class,
       //#                adhering to the interface described by Theseus::Algorithms::Base.
       //#                It defaults to Theseus::Algorithms::RecursiveBacktracker.
@@ -116,7 +118,8 @@ class MazeOptions{
   //#                You can set the +:prebuilt+ parameter to +true+ in this case,
   //#                allowing you to then set the contents of the maze by hand,
   //#                using the //#[]= method.
-  final bool prebuilt;
+  //FIXIT: final
+  bool prebuilt;
   MazeOptions({this.algorithm,this.braid,this.entrance, this.exit,this.height, this.mask, this.prebuilt:false, this.randomness, this.symmetry, this.weave, this.width, this.wrap});
 }
 
@@ -163,8 +166,8 @@ class MazeOptions{
 
     //# The algorithm object used to generate this maze. Defaults to
     //# an instance of Algorithms::RecursiveBacktracker.
-     RecursiveBacktracker/*attr_reader :*/ get algorithm=>_algorithm;
-     RecursiveBacktracker/*attr_reader :*/ _algorithm;
+    Base/*attr_reader :*/ get algorithm=>_algorithm;
+    Base/*attr_reader :*/ _algorithm;
 
     //# The width of the maze (number of columns).
     //#
@@ -379,7 +382,7 @@ class MazeOptions{
     //# The returned solver will not yet have generated the solution. Use
     //# Theseus::Solvers::Base//#solve or Theseus::Solvers::Base//#step to generate the
     //# solution.
-   solvers.Base new_solver(options/*={}*/){
+   solvers.Base new_solver(dynamic options/*={}*/){
 //      type = options.type!=null? options.type ? backtracker();
 //
 //      require "theseus/solvers///#{type}"
@@ -397,7 +400,7 @@ class MazeOptions{
     //# a cell (in sequence) leading from the start to the finish.
     //#
     //# See //#new_solver for a description of the supported options.
-    List<Position> solve(options){
+    List<Position> solve(dynamic options){
       return new_solver(options).solution();
    }
 
@@ -406,14 +409,14 @@ class MazeOptions{
       return _cells[y][x];
    }
    int operator [](Position xy){
-     return getCell(xy.x,xy.y);
+     return getCell(xy.x.toInt(),xy.y.toInt());
    }
-   operator []=(Position xy,int value){
-     return setCell(xy.x,xy.y,value);
+   void operator []=(Position xy,int value){
+     setCell(xy.x.toInt(),xy.y.toInt(),value);
    }
 
     //# Sets the bitfield for the cell at the given (+x+,+y+) coordinate.
-    setCell(int x,int y,int value){//operator []=(x,y,value){
+   int setCell(int x,int y,int value){//operator []=(x,y,value){
       return _cells[y][x] = value;
    }
 
@@ -421,13 +424,13 @@ class MazeOptions{
     //# +false+ if the method should not be called again (e.g., the maze has
     //# been completed), and +true+ otherwise.
     bool step(){
-      if (_generated){
-      return false;
-      };
+      if (_generated) {
+        return false;
+      }
 
       if (_deadends!=null && _deadends.isNotEmpty/*.any?*/) {
         var dead_end = _deadends.removeLast();// .pop
-        _braidMethod(dead_end.x, dead_end.y);
+        _braidMethod(dead_end.x.toInt(), dead_end.y.toInt());
         
         _generated = _deadends.isEmpty;// .empty?
         return !_generated;
@@ -494,7 +497,7 @@ class MazeOptions{
     bool valid(int x,int y){//?
       if (!wrap_y && (y < 0 || y >= height)) {
         return false;
-      };
+      }
       y %= height;
       if (!wrap_x && (x < 0 || x >= row_length(y))){
         return false; 
@@ -530,9 +533,9 @@ class MazeOptions{
     List<Position> dead_ends(){//
       List<Position> dead_ends = [];
 
-      ruby.each_with_index(_cells, /*_cells.each_with_index do |row, y|*/
+      ruby.each_with_index<List<int>>(_cells, /*_cells.each_with_index do |row, y|*/
       (row, y) {
-        ruby.each_with_index(row,(cell,x) { /*row.each_with_index do |cell, x|*/
+        ruby.each_with_index<int>(row,(cell,x) { /*row.each_with_index do |cell, x|*/
           if (dead(cell)){
             dead_ends.add(new Position.xy(x, y));
           }
@@ -544,15 +547,15 @@ class MazeOptions{
 
     //# Removes one cell from all dead-ends in the maze. Each call to this method
     //# removes another level of dead-ends, making the maze increasingly sparse.
-    sparsify(){//!
+    void sparsify(){//!
       dead_ends().forEach((pos) {
-        var x = pos.x;
-        var y = pos.y;
+        var x = pos.x.toInt();
+        var y = pos.y.toInt();
         var cell = _cells[y][x];
         int direction = cell & PRIMARY;
         var movePos = move(x, y, direction);
-        var nx = movePos.x;
-        var ny = movePos.y;
+        var nx = movePos.x.toInt();
+        var ny = movePos.y.toInt();
 
         //# if the cell includes UNDER codes, shifting it all UNDER_SHIFT bits to the right
         //# will convert those UNDER codes to PRIMARY codes. Otherwise, it will
@@ -565,8 +568,8 @@ class MazeOptions{
         if (_cells[ny][nx] & (opposite(direction) << UNDER_SHIFT) != 0) {
           _cells[ny][nx] &= ~((direction | opposite(direction)) << UNDER_SHIFT);
           var movePos = move(nx, ny, direction);
-          nx = movePos.x;
-          ny = movePos.y; 
+          nx = movePos.x.toInt();
+          ny = movePos.y.toInt();
         }
 
         _cells[ny][nx] &= ~opposite(direction);
@@ -597,7 +600,7 @@ class MazeOptions{
 
     //# Returns the direction that is the horizontal mirror to the given +direction+.
     //# This will work even if the +direction+ value is in the UNDER bitmask.
-    int hmirror(direction){
+    int hmirror(int direction){
       if (direction & UNDER != 0 ){
         return hmirror(direction >> UNDER_SHIFT) << UNDER_SHIFT;
       }else{
@@ -615,7 +618,7 @@ class MazeOptions{
 
     //# Returns the direction that is the vertical mirror to the given +direction+.
     //# This will work even if the +direction+ value is in the UNDER bitmask.
-    int vmirror(direction){
+    int vmirror(int direction){
       if (direction & UNDER != 0){
         return vmirror(direction >> UNDER_SHIFT) << UNDER_SHIFT;
     }else{
@@ -634,7 +637,7 @@ class MazeOptions{
     //# Returns the direction that results by rotating the given +direction+
     //# 90 degrees in the clockwise direction. This will work even if the +direction+
     //# value is in the UNDER bitmask.
-    int clockwise(direction){
+    int clockwise(int direction){
       if (direction & UNDER != 0){
         return clockwise(direction >> UNDER_SHIFT) << UNDER_SHIFT;
       }else{
@@ -656,7 +659,7 @@ class MazeOptions{
     //# Returns the direction that results by rotating the given +direction+
     //# 90 degrees in the counter-clockwise direction. This will work even if
     //# the +direction+ value is in the UNDER bitmask.
-    int counter_clockwise(direction){
+    int counter_clockwise(int direction){
       if (direction & UNDER != 0){
         return counter_clockwise(direction >> UNDER_SHIFT) << UNDER_SHIFT;
       }else{
@@ -704,7 +707,7 @@ class MazeOptions{
     //# Returns the number of cells in the given row. This is generally safer
     //# than relying the //#width method, since it is theoretically possible for
     //# a maze to have a different number of cells for each of its rows.
-    int row_length(row){
+    int row_length(int row){
       return _cells[row].length;
     }
 
@@ -712,7 +715,7 @@ class MazeOptions{
     //# passages on the PRIMARY plane (the UNDER bits are ignored, because the
     //# current algorithm for generating mazes will never result in a dead-end
     //# that is underneath another passage).
-    bool dead/*?*/(cell){
+    bool dead/*?*/(int cell){
       var raw = cell & PRIMARY;
       return raw == N || raw == S || raw == E || raw == W ||
         raw == NE || raw == NW || raw == SE || raw == SW;
@@ -724,16 +727,16 @@ class MazeOptions{
     //# valid point internal to the maze. When it finds one, it adds a passage
     //# to that cell leading to +point+. If no such adjacent cell exists, this
     //# method silently does nothing.
-    add_opening_from(Position point){
-      var x = point.x;
-      var y = point.y;
+    void add_opening_from(Position point){
+      var x = point.x.toInt();
+      var y = point.y.toInt();
       if (valid/*?*/(x, y)){
         //# nothing to be done
       }else{
         potential_exits_at(x, y).any((direction){
            var movePos = move(x, y, direction);
-           var nx = movePos.x;
-           var ny = movePos.y;
+           var nx = movePos.x.toInt();
+           var ny = movePos.y.toInt();
           if (valid/*?*/(nx, ny)){
             _cells[ny][nx] |= opposite(direction);
             return true;
@@ -749,15 +752,15 @@ class MazeOptions{
     //# to a valid point internal to the maze. When it finds one, it returns
     //# that point. If no such point exists, it returns +nil+.
     Position adjacent_point(Position point){
-       var x = point.x;
-      var y = point.y;
+       var x = point.x.toInt();
+      var y = point.y.toInt();
       if (valid/*?*/(x, y)){
         return point;
       }else{
         potential_exits_at(x, y).any((direction){ //potential_exits_at(x, y).each do |direction|
           var movePos = move(x, y, direction);
-              var nx = movePos.x;
-          var ny = movePos.y; 
+              var nx = movePos.x.toInt();
+          var ny = movePos.y.toInt();
           if (valid(nx, ny)){
             point = new Position.xy(nx, ny); 
             return true;
@@ -820,7 +823,7 @@ class MazeOptions{
     //#
     //# You'll generally never call this method directly, except to construct grids
     //# yourself.
-    apply_move_at(int x,int y, direction){
+    void apply_move_at(int x,int y,int direction){
       if (direction == direction_under){
         _cells[y][x] <<= UNDER_SHIFT;
       }else{
@@ -835,7 +838,7 @@ class MazeOptions{
       }
     }
     
-    static final direction_under = null; /* :under */
+    static final int direction_under = null; /* :under */
 
     //# Returns the type of the maze as a string. OrthogonalMaze, for
     //# instance, is reported as "orthogonal".
@@ -847,14 +850,14 @@ class MazeOptions{
     //# Returns the maze rendered to a particular format. Supported
     //# formats are currently :ascii and :png. The +options+ hash is passed
     //# through to the formatter.
-    to(FormatType format, [options]/*={}*/);
+    V to<V, P>(FormatType format, [P options]/*={}*/);
 
     //# Returns the maze rendered to a string.
-    String to_s(options){
-      return to(FormatType.ascii, options).toString();
+    String to_s(dynamic options){
+      return to<formatters.ASCIIDelta, void>(FormatType.ascii, options).toString();
     }
 
-    inspect(){ //# :nodoc:
+    void inspect(){ //# :nodoc:
 //      "//#<//#{self.class.name}:0x%X %dx%d %s>" % [
 //        object_id, _width, _height,
 //        generated? ? "generated" : "not generated"]
@@ -870,12 +873,12 @@ class MazeOptions{
     //# for +direction+ need to be considered (see SigmaMaze).
     bool weave_allowed/*?*/(int from_x,int from_y,int thru_x,int thru_y,int direction){ //#:nodoc:
     var movePos = move(thru_x, thru_y, direction);      
-      var nx2 = movePos.x;
-      var ny2 = movePos.y; 
-      return (_cells[thru_y][thru_x] & UNDER == 0) && valid(nx2, ny2) && _cells[ny2][nx2] == 0;
+      var nx2 = movePos.x.toInt();
+      var ny2 = movePos.y.toInt();
+      return (_cells[thru_y][thru_x] & UNDER == 0) && valid(nx2.toInt(), ny2.toInt()) && _cells[ny2][nx2] == 0;
     }
 
-    List perform_weave(int from_x,int from_y,int to_x,int to_y,int direction){ //#:nodoc:
+    List<int> perform_weave(int from_x,int from_y,int to_x,int to_y,int direction){ //#:nodoc:
       if ( ruby.rand(2) == 0) {//# move under existing passage
         apply_move_at(to_x, to_y, direction << UNDER_SHIFT);
         apply_move_at(to_x, to_y, opposite(direction) << UNDER_SHIFT);
@@ -886,15 +889,15 @@ class MazeOptions{
       }
       
       var movePos = move(to_x, to_y, direction);
-      var nx = movePos.x;
-      var ny = movePos.y; 
-      return [nx, ny, direction];
+      var nx = movePos.x.toInt();
+      var ny = movePos.y.toInt();
+      return <int>[nx, ny, direction];
     }
 
     //# Not all maze types support symmetry. If a subclass supports any of the
     //# symmetry types (or wants to implement its own), it should override this
     //# method.
-    _configure_symmetry(){ //#:nodoc:
+    void _configure_symmetry(){ //#:nodoc:
       if (_symmetry != /*none*/null) {
         throw new UnimplementedError("only :none symmetry is implemented by default");
       }
@@ -926,8 +929,8 @@ class MazeOptions{
     //# Calculate the default entrance, by looking for the upper-leftmost point.
     Position _default_entrance(){ //#:nodoc:
       Position result = new Position.xy(0, 0); //# if every cell is masked, then 0,0 is as good as any!
-      ruby.each_with_index(_cells, (row, y){ //_cells.each_with_index do |row, y|
-        return ruby.each_with_index(row,(cell, x){//row.each_with_index do |cell, x|
+      ruby.each_with_index<List<int>>(_cells, (row, y){ //_cells.each_with_index do |row, y|
+        return ruby.each_with_index<int>(row,(cell, x){//row.each_with_index do |cell, x|
           if (_mask.getCell(x, y)) {
             result = new Position.xy(x-1, y);
             return true;
@@ -941,9 +944,9 @@ class MazeOptions{
     //# Calculate the default exit, by looking for the lower-rightmost point.
     Position _default_exit(){ //#:nodoc:
       Position result = new Position.xy(0, 0); //# if every cell is masked, then 0,0 is as good as any!
-     ruby.each_with_index<List>(_cells.reversed, (List row, y){//_cells.reverse.each_with_index do |row, y|
+     ruby.each_with_index<List<int>>(_cells.reversed, (List<int> row, y){//_cells.reverse.each_with_index do |row, y|
         var ry = _cells.length - y - 1;
-            return ruby.each_with_index(row.reversed ,(cell, x){ //row.reverse.each_with_index do |cell, x|{
+            return ruby.each_with_index<int>(row.reversed ,(cell, x){ //row.reverse.each_with_index do |cell, x|{
           var rx = row.length - x - 1;
               if (_mask.getCell(rx, ry)) {
                 result= new Position.xy(rx+1, ry) ;
@@ -954,7 +957,7 @@ class MazeOptions{
       return result;//[0, 0]; //# if every cell is masked, then 0,0 is as good as any!
     }
 
-    _move_symmetrically_in_x(int x,int y,int direction){ //#:nodoc:
+    void _move_symmetrically_in_x(int x,int y,int direction){ //#:nodoc:
       var row_width = _cells[y].length;
       if (direction == direction_under){
         _cells[y][row_width - x - 1] = (UNDER_SHIFT); //<<= UNDER_SHIFT
@@ -963,7 +966,7 @@ class MazeOptions{
       }
     }
 
-    _move_symmetrically_in_y(int x,int y,int direction){ //#:nodoc:
+    void _move_symmetrically_in_y(int x,int y,int direction){ //#:nodoc:
       if (direction == direction_under){
         _cells[_cells.length - y - 1][x] = UNDER_SHIFT; //<<= UNDER_SHIFT
       }else{
@@ -971,7 +974,7 @@ class MazeOptions{
       }
     }
 
-    _move_symmetrically_in_xy(int x,int y,int direction){ //#:nodoc:
+    void _move_symmetrically_in_xy(int x,int y,int direction){ //#:nodoc:
       var row_width = _cells[y].length;
       if (direction == direction_under){
         _cells[y][row_width - x - 1] <<= UNDER_SHIFT;
@@ -984,7 +987,7 @@ class MazeOptions{
       }
     }
 
-    _move_symmetrically_radially(int x,int y,int direction){ //#:nodoc:
+    void _move_symmetrically_radially(int x,int y,int direction){ //#:nodoc:
       var row_width = _cells[y].length;
       if (direction == direction_under){
         _cells[_cells.length - x - 1][y] <<= UNDER_SHIFT;
@@ -999,7 +1002,7 @@ class MazeOptions{
 
     //# Finishes the generation of the maze by adding openings for the entrance
     //# and exit, and determing which dead-ends to braid (if any).
-    _finish_not()/*!*/{ //#:nodoc:
+    bool _finish_not()/*!*/{ //#:nodoc:
       add_opening_from(_entrance);
       add_opening_from(_exit);
 
@@ -1014,9 +1017,9 @@ class MazeOptions{
     //#
     //# TODO: look for the direction that results in the longest loop.
     //# might be kind of spendy, but worth trying, at least.
-    _braidMethod(int x,int y){ //#:nodoc:
+    void _braidMethod(int x,int y){ //#:nodoc:
       if (!dead/*?*/(_cells[y][x])){
-       return;
+        return;
       }
       //return unless dead?(_cells[y][x])
       List<int> tries = potential_exits_at(x, y);
@@ -1026,9 +1029,9 @@ class MazeOptions{
         if (try1 == _cells[y][x]) 
         {
           return false;//next
-         }; 
+        }
         var movePos = move(x, y, try1);
-        var nx = movePos.x, ny = movePos.y; 
+        var nx = movePos.x.toInt(), ny = movePos.y.toInt();
         if (valid(nx, ny)){
           var opp = opposite(try1);
               if (_cells[ny][nx] & (opp << UNDER_SHIFT) != 0) {

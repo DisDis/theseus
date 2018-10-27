@@ -47,7 +47,7 @@ part of theseus;
         break;
       }
 
-      Position connector(x, y, ix, iy, dir){
+      Position connector(int x,int y,int ix,int iy,int dir){
         var start_x = x;
         var start_y = y;
         while (_cells[y][x] == 0){
@@ -64,13 +64,14 @@ part of theseus;
         }else{
           _cells[y][x] |= dir;
           var movePos = move(x, y, dir);
-          var nx = movePos.x, ny = movePos.y;
+          var nx = movePos.x.toInt();
+          var ny = movePos.y.toInt();
           _cells[ny][nx] |= opposite(dir);
           return new Position.xy(x,y);
         }
       }
 
-      bool even(x)=>x % 2 == 0 ;//even = lambda { |x| x % 2 == 0 }
+      bool even(int x)=>x % 2 == 0 ;//even = lambda { |x| x % 2 == 0 }
 
       switch ( _symmetry){
         case SymmetryType.x: 
@@ -79,21 +80,21 @@ part of theseus;
           }
           break;
         case SymmetryType.y:
-          if (even(_height)){
-          connector(ruby.rand(available_width), available_height-1, 1, 0, Maze.S);
-          };
+          if (even(_height)) {
+            connector(ruby.rand(available_width), available_height - 1, 1, 0, Maze.S);
+          }
           break;
         case SymmetryType.xy:
           if( even(_width)){
             var xy = connector(available_width-1, ruby.rand(available_height), 0, 1, Maze.E);
-            _cells[_height-xy.y-1][xy.x] |= Maze.E;
-            _cells[_height-xy.y-1][xy.x+1] |= Maze.W;
+            _cells[_height-xy.y.toInt()-1][xy.x.toInt()] |= Maze.E;
+            _cells[_height-xy.y.toInt()-1][xy.x.toInt()+1] |= Maze.W;
           }
 
           if( even(_height)){
             var xy = connector(ruby.rand(available_width), available_height-1, 1, 0, Maze.S);
-            _cells[xy.y][_width-xy.x-1] |= Maze.S;
-            _cells[xy.y+1][_width-xy.x-1] |= Maze.N;
+            _cells[xy.y.toInt()][_width-xy.x.toInt()-1] |= Maze.S;
+            _cells[xy.y.toInt()+1][_width-xy.x.toInt()-1] |= Maze.N;
           }
           break;
         case SymmetryType.radial:
@@ -125,9 +126,9 @@ part of theseus;
     //# The process of converting an orthogonal maze to a unicursal maze is straightforward;
     //# take the maze, and divide all passages in half down the middle, making two passages.
     //# Dead-ends become a u-turn, etc. This is why the maze increases in size.
-    Maze to_unicursal(options/*={}*/){
-      options.width =  _width*2;
-      options.height =  _height*2;
+    Maze to_unicursal(MazeOptions options/*={}*/){
+      options.width =  (_width * 2).toInt();
+      options.height =  (_height * 2).toInt();
       options.prebuilt = true;
       
       Maze unicursal = new OrthogonalMaze(options);
@@ -142,8 +143,8 @@ part of theseus;
         }
       }
 
-      ruby.each_with_index(_cells,(row, y){
-        ruby.each_with_index(row,(cell, x){
+      ruby.each_with_index<List<int>>(_cells,(row, y){
+        ruby.each_with_index<int>(row,(cell, x){
           var x2 = x * 2;
           var y2 = y * 2;
 
@@ -166,10 +167,10 @@ part of theseus;
             set(x2+1, y2+1, Maze.S);
             if (cell & Maze.W == 0){
               set(x2, y2, Maze.S, true);
-            };
+            }
             if (cell & Maze.E == 0 ){
               set(x2+1, y2, Maze.S, true);
-            };
+            }
             if ((cell & Maze.PRIMARY) == Maze.S){
               set(x2, y2, Maze.E, true); 
             }
@@ -245,12 +246,12 @@ part of theseus;
 //# Returns the maze rendered to a particular format. Supported
   //# formats are currently :ascii and :png. The +options+ hash is passed
   //# through to the formatter.
-  to(FormatType format, [options]/*={}*/){
+    V to<V, P>(FormatType format, [P options]/*={}*/){
     if (format == FormatType.ascii) {
-      return new formatters.ASCIIOrthogonal(this, options);
+      return new formatters.ASCIIOrthogonal(this) as V;
     } 
       else if (format == FormatType.png) {
-      return new formatters.PNGOrthogonal(this, options);
+      return new formatters.PNGOrthogonal(this, options as formatters.PNGFormatterOptions) as V;
       //Formatters::PNG.const_get(type).new(self, options).to_blob
       }
     else

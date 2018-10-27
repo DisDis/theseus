@@ -17,7 +17,7 @@ abstract class BaseMask{
   //# Any object may be used as a mask as long as it responds to //#height, //#width, and
   //# //#[].
   class Mask extends BaseMask{
-    List _grid;
+    List<List<bool>> _grid;
     //# Given a string, treat each line as rows and each character as a cell. Every
     //# period character (".") will be mapped to +true+, and everything else to +false+.
     //# This lets you define simple masks as ASCII art:
@@ -66,12 +66,12 @@ abstract class BaseMask{
 
     //# Instantiate a new mask from the given grid, which must be an Array of rows, and each
     //# row must be an Array of true/false values for each column in the row.
-    Mask(List grid){
+    Mask(List<List<bool>> grid){
       _grid = grid;
       _height = _grid.length;
       _width = 0; //_grid.map((row)=> row.length).max
-      _grid.map((row)=> row.length).forEach((item){
-        if (_width<item){
+      _grid.map((row)=> row.length).forEach((int item){
+        if (_width < item) {
           _width = item;
         }
       });
@@ -94,14 +94,14 @@ abstract class BaseMask{
 
     int get width=>_width;
     int _width;
-    List _grid;
+    List<List<bool>> _grid;
 
     //# Returns a new TriangleMask instance with the given height. The width will
     //# always be <code>2h+1</code> (where +h+ is the height).
-    TriangleMask(height){
+    TriangleMask(int height){
       _height = height;
       _width = _height * 2 + 1;
-      _grid = new List.generate(_height,(y){
+      _grid = new List<List<bool>>.generate(_height,(y){
         var run = y * 2 + 1;
         var from = _height - y;
         var to = from + run - 1;
@@ -112,7 +112,7 @@ abstract class BaseMask{
     }
 
     //# Returns the +true+/+false+ value for the corresponding cell in the grid.
-   bool getCell(x,y){//operator []
+   bool getCell(int x,int y){//operator []
       return _grid[y][x];
     }
   }
@@ -129,13 +129,13 @@ abstract class BaseMask{
         int get width=>_width;
         int _width;
 
-    TransparentMask([width=0, height=0]){
+    TransparentMask([int width=0,int height=0]){
       _width = width;
       _height = height;
     }
 
     //# Always returns +true+.
-    bool getCell(x,y){
+    bool getCell(int x,int y){
       return true;
     }
   }

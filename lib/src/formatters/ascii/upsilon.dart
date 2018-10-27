@@ -23,7 +23,7 @@ class ASCIIUpsilon extends ASCII {
   //#
   //# The returned object will be fully initialized, containing an ASCII
   //# representation of the given SigmaMaze.
-  ASCIIUpsilon(UpsilonMaze maze, _) : super(maze.width * 2 + 1, maze.height * 2 + 3) {
+  ASCIIUpsilon(UpsilonMaze maze) : super(maze.width * 2 + 1, maze.height * 2 + 3) {
     for (int y = 0; y < maze.height; y++) {
       var py = y * 2;
       for (int x = 0; x < maze.row_length(y); x++) {
@@ -44,7 +44,7 @@ class ASCIIUpsilon extends ASCII {
   }
 
 
-  _draw_octogon_cell(px, py, cell) { //#:nodoc:
+  void _draw_octogon_cell(int px,int py,int cell) { //#:nodoc:
     if (cell & Maze.N == 0) {
       setCell(px + 1, py, "_");
     }
@@ -71,7 +71,7 @@ class ASCIIUpsilon extends ASCII {
     }
   }
 
-  _draw_square_cell(px, py, cell) { //#:nodoc:
+  void _draw_square_cell(int px,int py,int cell) { //#:nodoc:
     if (cell & Maze.N == 0) {
       setCell(px + 1, py + 1, "_");
     }

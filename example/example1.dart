@@ -1,7 +1,7 @@
 import 'package:theseus/theseus.dart';
 import 'package:theseus/src/formatters/formatters.dart' as formatters;
 
-main(){
+void main(){
     var mazeOption = new MazeOptions(width: 20, height: 20);
     //srand(14);
     Maze orthogonalMaze = new OrthogonalMaze(mazeOption);
@@ -28,7 +28,7 @@ main(){
 void printMaze(Maze maze) {
   formatters.ASCIIMode.values.forEach((formatters.ASCIIMode mode){
       print("mode: $mode");
-      var out = maze.to(FormatType.ascii,mode) as formatters.ASCII;
+      var out = maze.to<formatters.ASCII, formatters.ASCIIMode>(FormatType.ascii,mode);
       print(out.toString());
   });
 }

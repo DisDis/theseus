@@ -35,18 +35,18 @@ part of theseus;
       apply_move_at(to_x, to_y, opposite(direction) << Maze.UNDER_SHIFT);
 
       var movePos = move(to_x, to_y, direction);
-      var nx = movePos.x;
-      var ny = movePos.y;
+      var nx = movePos.x.toInt();
+      var ny = movePos.y.toInt();
       return [nx, ny, direction];
     }
 
   @override
-  to(FormatType format, [options]) {
+  V to<V, P>(FormatType format, [P options]) {
     if (format == FormatType.ascii) {
-         return new formatters.ASCIIUpsilon(this, options);
+         return new formatters.ASCIIUpsilon(this) as V;
        } 
       else if (format == FormatType.png) {
-        return new formatters.PNGUpsilon(this, options);
+        return new formatters.PNGUpsilon(this, options as formatters.PNGFormatterOptions) as V;
          //Formatters::PNG.const_get(type).new(self, options).to_blob
       }
        else

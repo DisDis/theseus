@@ -49,7 +49,7 @@ part of theseus.formatters;
           }
         }
 
-        _draw_cell(PNGCanvas canvas, Position point, num x, num y, cell) {
+        void _draw_cell(PNGCanvas canvas, Position point, int x, int y,int cell) {
           //#:nodoc:
           if (cell == 0) {
             return;
@@ -100,8 +100,8 @@ part of theseus.formatters;
               color_at(point, ANY_E));
         }
 
-        _draw_vertical(PNGCanvas canvas, num x, num y, direction, bool corridor,
-            bool wall, color) {
+       void _draw_vertical(PNGCanvas canvas, int x, int y,int direction, bool corridor,
+            bool wall,int color) {
           //#:nodoc:
           if (corridor) {
             _fill_rect(canvas, x + d1, y, x + d2, y + d1 * direction, color);
@@ -118,8 +118,8 @@ part of theseus.formatters;
           }
         }
 
-        _draw_horizontal(PNGCanvas canvas, num x, num y, num direction,
-            bool corridor, bool wall, color) {
+        void _draw_horizontal(PNGCanvas canvas, int x, int y, int direction,
+            bool corridor, bool wall,int color) {
           //#:nodoc:
           if (corridor) {
             _fill_rect(canvas, x, y + d1, x + d1 * direction, y + d2, color);

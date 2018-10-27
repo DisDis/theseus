@@ -8,7 +8,7 @@ typedef bool EachWithIndexCallback<V>(V item,int index);
 
 
 
-bool each_with_index<V>(Iterable array,EachWithIndexCallback<V> callback){
+bool each_with_index<V>(Iterable<V> array,EachWithIndexCallback<V> callback){
   int index= 0;
   return array.any((item){
     if (callback(item,index)==true){
@@ -21,7 +21,7 @@ bool each_with_index<V>(Iterable array,EachWithIndexCallback<V> callback){
 
 math.Random _rnd = new math.Random();
 
-srand(seed){
+void srand(int seed){
   _rnd = new math.Random(seed);
 }
 

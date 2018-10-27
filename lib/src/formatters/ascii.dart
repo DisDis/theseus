@@ -35,7 +35,7 @@ class Dimensions{
       }
 
       //# Sets the character at the given coordinates.
-      setCell (int x,int y,String char){
+      void setCell (int x,int y,String char){
           _chars[y][x] = char;
       }
 

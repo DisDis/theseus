@@ -95,17 +95,17 @@ part of theseus.solvers;
         }else{
           _open = _open.next;
 
-          _visits[current.point.y][current.point.x] |= current.under ? 2 : 1;
+          _visits[current.point.y.toInt()][current.point.x.toInt()] |= current.under ? 2 : 1;
 
           var cell = _maze[current.point];
 
-          List<int> directions = _maze.potential_exits_at(current.point.x, current.point.y);
+          List<int> directions = _maze.potential_exits_at(current.point.x.toInt(), current.point.y.toInt());
           directions.forEach((dir){
             var _try = current.under ? (dir << Maze.UNDER_SHIFT) : dir;
             if (cell & _try != 0){
              Position point = _move(current.point, dir);
               //next unless _maze.valid?(point[0], point[1])
-              if (!_maze.valid(point.x, point.y)){
+              if (!_maze.valid(point.x.toInt(), point.y.toInt())){
                return;
               }
               var under = ((_maze[point] >> Maze.UNDER_SHIFT) & _maze.opposite(dir) != 0);
@@ -123,15 +123,15 @@ part of theseus.solvers;
         return Math.sqrt(Math.pow((_b.x - pt.x),2)/* **2 */ + Math.pow((_b.y - pt.y),2) /* **2 */).toInt();
       }
 
-      _add_node(Position pt,bool under,int path_cost,List<Position> history){ //#:nodoc:
-        if (_visits[pt.y][pt.x] & (under ? 2 : 1) != 0){
+      void _add_node(Position pt,bool under,int path_cost,List<Position> history){ //#:nodoc:
+        if (_visits[pt.y.toInt()][pt.x.toInt()] & (under ? 2 : 1) != 0){
          return; 
         }
 
         var node = new Node(pt, under, path_cost, _estimate(pt), history);
 
         if (_open!=null){
-          var p = null;
+          Node p = null;
           Node n = _open;
 
           while (n!=null && n.compareTo(node)==-1 /*n< node*/){

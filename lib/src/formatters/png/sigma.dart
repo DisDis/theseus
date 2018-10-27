@@ -42,7 +42,7 @@ part of theseus.formatters;
 // any = proc { |x| x | (x << Maze.UNDER_SHIFT) };
           int any(int x) => x | (x << Maze.UNDER_SHIFT);
 
-          _draw_cell(PNGCanvas canvas, Position point, bool shifted, num x,
+          void _draw_cell(PNGCanvas canvas, Position point, bool shifted, num x,
               num y, int cell) {
               if (cell == 0) {
                   return;
@@ -51,8 +51,7 @@ part of theseus.formatters;
               var size = options.cell_size - options.cell_padding * 2;
               var s4 = size / 4.0;
 
-              var fs4 = options.cell_size /
-                  4.0; //# fs == full-size, without padding
+              //var fs4 = options.cell_size / 4.0; //# fs == full-size, without padding
 
               var p1 = new Position.xy(
                   x + options.cell_padding + s4, y + options.cell_padding);

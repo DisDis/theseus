@@ -24,7 +24,7 @@ class ASCIISigma extends ASCII {
   //#
   //# The returned object will be fully initialized, containing an ASCII
   //# representation of the given SigmaMaze.
-  ASCIISigma(SigmaMaze maze, _) : super(maze.width * 2 + 2, maze.height * 2 + 2) {
+  ASCIISigma(SigmaMaze maze) : super(maze.width * 2 + 2, maze.height * 2 + 2) {
     for (int y = 0; y < maze.height; y++) {
       var py = y * 2;
       for (int x = 0; x < maze.row_length(y); x++) {

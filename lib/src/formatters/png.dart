@@ -119,7 +119,7 @@ class PNGFormatterOptions{
         //# +:color: metadata from the first path that is set at the given point is
         //# returned. If no path describes the given point, then the value of the
         //# +:cell_color+ option is returned.
-        num color_at(Position pt, [direction = null]) {
+        int color_at(Position pt, [int direction = null]) {
             //_paths.forEach((Path path)
             for (Path path in _paths)
             {
@@ -127,20 +127,20 @@ class PNGFormatterOptions{
                     .isSet(pt)) {
                     return path.color;
                 }
-            };
+            }
 
             return _options.cell_color;
         }
 
         //# Returns a new 2-tuple (x2,y2), where x2 is point[0] + dx, and y2 is point.y + dy.
-        Position move(Position point, dx, dy) {
+        Position move(Position point,num dx,num dy) {
             return new Position.xy(point.x + dx, point.y + dy);
         }
 
         //# Clamps the value +x+ so that it lies between +low+ and +hi+. In other words,
         //# returns +low+ if +x+ is less than +low+, and +high+ if +x+ is greater than
         //# +high+, and returns +x+ otherwise.
-        int clamp(int x, int low, int hi) {
+        V clamp<V extends num>(V x, V low, V hi) {
             if (x < low) {
                 x = low;
             }
@@ -153,7 +153,7 @@ class PNGFormatterOptions{
         //# Draws a line from +p1+ to +p2+ on the given canvas object, in the given
         //# color. The coordinates of the given points are clamped (naively) to lie
         //# within the canvas' bounds.
-        _line(PNGCanvas canvas,Position p1,Position p2, color) {
+        void _line(PNGCanvas canvas,Position p1,Position p2,num color) {
             canvas.line(
                 clamp(p1.x.round(), 0, canvas.width - 1),
                 clamp(p1.y.round(), 0, canvas.height - 1),
@@ -164,7 +164,7 @@ class PNGFormatterOptions{
 
         //# Fills the rectangle defined by the given coordinates with the given color.
         //# The coordinates are clamped to lie within the canvas' bounds.
-        _fill_rect(PNGCanvas canvas, x0, y0, x1, y1, color) {
+        void _fill_rect(PNGCanvas canvas,num x0,num y0,num x1,num y1,int color) {
             x0 = clamp(x0, 0, canvas.width - 1);
             y0 = clamp(y0, 0, canvas.height - 1);
             x1 = clamp(x1, 0, canvas.width - 1);
@@ -199,9 +199,9 @@ class PNGFormatterOptions{
         //# Each element of +points+ must be a 2-tuple describing a vertex of the
         //# polygon. It is assumed that the polygon is closed. All points are
         //# clamped (naively) to lie within the canvas' bounds.
-        _fill_poly(PNGCanvas canvas, List<Position> points, color) {
-            var min_y = 1000000;
-            var max_y = -1000000;
+        void _fill_poly(PNGCanvas canvas, List<Position> points,int color) {
+            num min_y = 1000000;
+            num max_y = -1000000;
             points.forEach((Position xy) {
                 if (xy.y < min_y) {
                     min_y = xy.y;
@@ -217,7 +217,7 @@ class PNGFormatterOptions{
             for (int y = min_y.floor(); y < max_y.ceil(); y++) {
                 //min_y.floor.upto(max_y.ceil) do |y|{
 
-                List nodes = [];
+                List<num> nodes = <num>[];
 
                 Position prev = points.last;
                 points.forEach((Position point) {

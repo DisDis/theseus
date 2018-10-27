@@ -79,7 +79,7 @@ class PathOptions{
       if (direction != null){
         var opposite = _maze.opposite(direction);
 
-        if (_maze.valid(from.x, from.y)){
+        if (_maze.valid(from.x.toInt(), from.y.toInt())){
           if (_maze[from] & direction == 0){
             direction <<= Maze.UNDER_SHIFT ;
           }
@@ -104,7 +104,7 @@ class PathOptions{
     //# Adds all path and cell information from the parameter (which must be a
     //# Path instance) to the current Path object. The metadata from the parameter
     //# is not copied.
-    add_path(Path path){
+    void add_path(Path path){
       path.paths.forEach((Position pt, value) {
         //TODO: check!
         _paths[pt] = value; // _paths[pt] |= value;
@@ -118,7 +118,7 @@ class PathOptions{
     }
 
     //# Returns true if there is a path from the given point, in the given direction.
-    bool path(Position point, direction){
+    bool path(Position point,int direction){
       var tmp = _paths[point];
       if (tmp == null){
         tmp = 0;

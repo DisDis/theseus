@@ -2,11 +2,12 @@
 //require 'theseus'
 @TestOn("vm")
 library theseus.test;
+import 'package:theseus/src/algorithms/algorithms.dart';
 import 'package:theseus/theseus.dart';
 import 'package:theseus/ruby_port.dart';
 import 'package:test/test.dart';
 
-main(){
+void main(){
   test("maze_without_explicit_height_uses_width",(){
     Maze maze = new OrthogonalMaze(new MazeOptions(width: 10));
     expect(10,equals(maze.width));
@@ -185,8 +186,8 @@ main(){
   test("step_should_populate_current_cell_and_next_cell",(){
     OrthogonalMaze maze = /*Theseus::*/new OrthogonalMaze(new MazeOptions(width: 10));
 
-    var cx = maze.algorithm.x;
-    var cy = maze.algorithm.y;
+    var cx = (maze.algorithm as RecursiveBacktracker).x;
+    var cy = (maze.algorithm as RecursiveBacktracker).y;
     expect(true,equals(cx >= 0 && cx < maze.width));
     expect(true,equals(cy >= 0 && cy < maze.height));
     expect(0,equals(maze.getCell(cx, cy)));
@@ -199,8 +200,8 @@ main(){
     var movePos = maze.move(cx, cy, direction);
     var nx = movePos.x, ny = movePos.y;
     expect([nx, ny],isNot(equals([cx, cy])));
-    expect([nx,ny], equals([maze.algorithm.x, maze.algorithm.y]));
+    expect([nx,ny], equals([(maze.algorithm as RecursiveBacktracker).x, (maze.algorithm as RecursiveBacktracker).y]));
 
-    expect(maze.opposite(direction),equals(maze.getCell(nx, ny)));
+    expect(maze.opposite(direction),equals(maze.getCell(nx.toInt(), ny.toInt())));
   });
 }

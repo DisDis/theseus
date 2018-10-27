@@ -23,7 +23,7 @@ class BacktrackerStackItem{
         _stack = [];
       }
 
-     final Map VISIT_MASK = { false : 1, true : 2 };
+     final Map<bool,int> VISIT_MASK = { false : 1, true : 2 };
 
       Iterable<Position> current_solution(){//#:nodoc:
         return _stack.map((item)=>item.position); //_stack[1..-1].map { |item| item[0] };

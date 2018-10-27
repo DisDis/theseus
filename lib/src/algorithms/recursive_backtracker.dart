@@ -15,7 +15,8 @@ class RecursiveBacktracker extends Base {
   int get y => _y;
   int _y;
 
-  List _stack;
+  List<List<dynamic>> _stack;
+  List<int> get tries => _tries;
   List<int> _tries;
 
   RecursiveBacktracker(Maze maze,MazeOptions options):super(maze, options) { //#:nodoc:
@@ -29,23 +30,23 @@ class RecursiveBacktracker extends Base {
 
 
     _tries = new List.from(_maze.potential_exits_at(_x, _y))..shuffle(ruby.getRandom());
-    _stack = [];
+    _stack = <List<dynamic>>[];
   }
 
-  do_step() { //#:nodoc:
+  bool do_step() { //#:nodoc:
     int direction = _next_direction();
     if (direction == null) {
       return false;
     }
     var movePos = _maze.move(_x, _y, direction);
-    var nx = movePos.x;
-    var ny = movePos.y;
+    var nx = movePos.x.toInt();
+    var ny = movePos.y.toInt();
 
     _maze.apply_move_at(_x, _y, direction);
 
     //# if (nx,ny) is already visited, then we're weaving (moving either over
     //# or under the existing passage).
-    if (_maze.getCell(nx, ny) != 0) {
+    if (_maze.getCell(nx.toInt(), ny.toInt()) != 0) {
       var _tmp = _maze.perform_weave(_x, _y, nx, ny, direction);
       nx = _tmp[0];
       ny = _tmp[1];
@@ -53,7 +54,7 @@ class RecursiveBacktracker extends Base {
     }
     _maze.apply_move_at(nx, ny, _maze.opposite(direction));
 
-    _stack.add([_x, _y, _tries]);
+    _stack.add(<dynamic>[_x, _y, _tries]);
     _tries = new List.from(_maze.potential_exits_at(nx, ny))..shuffle(ruby.getRandom());
     //TODO: Check syntax
     if (!(ruby.rand(100) < _maze.randomness) && _tries.contains(direction)) { //_tries.include?(direction) unless rand(100) < _maze.randomness
@@ -74,8 +75,8 @@ class RecursiveBacktracker extends Base {
     while (true) {
       int direction = _tries.removeLast();
       var movePos = _maze.move(_x, _y, direction);
-      var nx = movePos.x;
-      var ny = movePos.y;
+      var nx = movePos.x.toInt();
+      var ny = movePos.y.toInt();
 
       if (_maze.valid(nx, ny) && (_maze.getCell(_x, _y) & (direction | (direction << Maze.UNDER_SHIFT)) == 0)) {
         if (_maze.getCell(nx, ny) == 0) {
@@ -94,8 +95,8 @@ class RecursiveBacktracker extends Base {
           return null;
         } else {
           var _tmp = _stack.removeLast();
-          _x = _tmp[0];
-          _y = _tmp[1];
+          _x = _tmp[0] as int;
+          _y = _tmp[1] as int;
           _tries = _tmp[2] as List<int>;
         }
       }

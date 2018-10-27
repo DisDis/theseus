@@ -62,7 +62,7 @@ class Metrics {
 //        any = proc { |x| x | (x << Maze.UNDER_SHIFT) };
         int any(int x) => x | (x << Maze.UNDER_SHIFT);
 
-        _draw_octogon_cell(PNGCanvas canvas, Position point, num x, num y,
+       void _draw_octogon_cell(PNGCanvas canvas, Position point, num x, num y,
             int cell, Metrics metrics) {
           //#:nodoc:
           var p1 = new Position.xy(
@@ -147,7 +147,7 @@ class Metrics {
           }
         }
 
-        _draw_square_cell(PNGCanvas canvas, Position point, num x, num y,
+       void _draw_square_cell(PNGCanvas canvas, Position point, num x, num y,
             int cell, Metrics metrics) {
           //#:nodoc:
           var v = options.cell_padding + metrics.s4;
@@ -179,7 +179,7 @@ class Metrics {
 
           if (cell & Maze.N == 0) {
             _line(canvas, p1, new Position.xy(p2.x, p1.y), options.wall_color);
-          };
+          }
           if (cell & Maze.E == 0) {
             _line(canvas, new Position.xy(p2.x, p1.y), p2, options.wall_color);
           }
