@@ -60,7 +60,7 @@ part of theseus.formatters;
                   var r1 = p2;
                   var r2 = move(p3, 0, sign * dy);
                   _fill_rect(canvas, r1.x.round(), r1.y.round(), r2.x.round(),
-                      r2.y.round(), clr);
+                      r2.y.round(), clr!);
                   _line(canvas, r1, new Position.xy(r1.x, r2.y),
                       options.wall_color);
                   _line(canvas, r2, new Position.xy(r2.x, r1.y),
@@ -76,7 +76,7 @@ part of theseus.formatters;
                   var r2 = move(p1, -dx, 0);
                   var r3 = move(p2, -dx, 0);
                   var r4 = p2;
-                  _fill_poly(canvas, [r1, r2, r3, r4], color_at(point, ANY_W).toInt());
+                  _fill_poly(canvas, [r1, r2, r3, r4], color_at(point, ANY_W)!.toInt());
                   _line(canvas, r1, r2, options.wall_color);
                   _line(canvas, r3, r4, options.wall_color);
               }
@@ -91,7 +91,7 @@ part of theseus.formatters;
                   var r2 = move(p1, dx, 0);
                   var r3 = move(p3, dx, 0);
                   var r4 = p3;
-                  _fill_poly(canvas, [r1, r2, r3, r4], color_at(point, ANY_E).toInt());
+                  _fill_poly(canvas, [r1, r2, r3, r4], color_at(point, ANY_E)!.toInt());
                   _line(canvas, r1, r2, options.wall_color);
                   _line(canvas, r3, r4, options.wall_color);
               }

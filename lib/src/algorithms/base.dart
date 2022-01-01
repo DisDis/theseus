@@ -6,17 +6,14 @@ part of theseus.algorithms;
       // The maze object that the algorithm will operate on.
       Maze get maze=>_maze;
       Maze _maze;
-      bool _pending;
+      bool _pending = true;
 
       // Create a new algorithm object that will operate on the
       // given maze.
-      Base(Maze maze,MazeOptions options){
-        _maze = maze;
-        _pending = true;
-      }
+      Base(this._maze, MazeOptions options);
 
       // Returns true if the algorithm has not yet completed.
-      bool get pending/*?*/{
+      bool get pending {
         return _pending;
       }
 

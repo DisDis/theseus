@@ -85,7 +85,7 @@ part of theseus;
       //# cell that was penetrated (opposite(W) == E), and then
       //# look it up in the AXIS_MAP (E<->NW or E<->SW, depending on the cell position)
       var entrance_wall = opposite(entrance_direction);
-      return AXIS_MAP[shifted][entrance_wall];
+      return AXIS_MAP[shifted]![entrance_wall]!;
     }
 
     @override
@@ -103,12 +103,12 @@ part of theseus;
     }
 
     @override
-    perform_weave(int from_x,int from_y,int to_x,int to_y,int direction){ //#:nodoc:
+    perform_weave(int? from_x,int? from_y,int to_x,int to_y,int direction){ //#:nodoc:
       bool shifted = to_x % 2 != 0;
       var pass_thru = _exit_wound(direction, shifted);
 
       apply_move_at(to_x, to_y, pass_thru << Maze.UNDER_SHIFT);
-      apply_move_at(to_x, to_y, AXIS_MAP[shifted][pass_thru] << Maze.UNDER_SHIFT);
+      apply_move_at(to_x, to_y, AXIS_MAP[shifted]![pass_thru]! << Maze.UNDER_SHIFT);
 
       var movePos = move(to_x, to_y, pass_thru);
       var nx = movePos.x.toInt();
@@ -117,7 +117,7 @@ part of theseus;
     }
     
     @override
-    V to<V, P>(FormatType format, [P options]) {
+    V to<V, P>(FormatType format, [P? options]) {
         if (format == FormatType.ascii) {
              return new formatters.ASCIISigma(this) as V;
            } 

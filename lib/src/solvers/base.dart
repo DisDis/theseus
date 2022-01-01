@@ -12,18 +12,18 @@ part of theseus.solvers;
 
       //# The point (2-tuple array) at which the solution path should begin.
       Position get a=>_a;
-      Position _a;
+      late Position _a;
 
       //# The point (2-tuple array) at which the solution path should end.
       Position get b=>_b;
-      Position _b;
+      late Position _b;
 
-      List<Position> _solution;
+      List<Position>? _solution;
 
       //# Create a new solver instance for the given maze, using the given
       //# start (+a+) and finish (+b+) points. The solution will not be immediately
       //# generated; to do so, use the //#step or //#solve methods.
-      Base(Maze maze, [Position a,Position b]){
+      Base(this._maze, [Position? a,Position? b]){
         _maze = maze;
         if (a == null) {
             a = maze.start();
@@ -44,7 +44,7 @@ part of theseus.solvers;
       //# Returns the solution path as an array of 2-tuples, beginning with //#a and
       //# ending with //#b. If the solution has not yet been generated, this will
       //# generate the solution first, and then return it.
-      List<Position> solution(){
+      List<Position>? solution(){
         if (!solved) {solve();}//solve unless solved?
         return _solution;
       }
@@ -65,13 +65,13 @@ part of theseus.solvers;
       //# //#step, until the maze has been solved.
      Iterable<Position> each() sync*{
         if (solved/*?*/){
-          for (var s in solution()){
+          for (var s in solution()!){
             yield s;
           }
         }else{
-          Position<num> s;
+          Position<num>? s;
           while ((s = step()) != null){
-            yield s;
+            yield s!;
           }
         }
       }
@@ -83,7 +83,7 @@ part of theseus.solvers;
         var prev = _maze.entrance;
 
         LinkType how;
-        (_solution!=null?_solution: current_solution()).forEach((Position pt){
+        (_solution!=null?_solution: current_solution())!.forEach((Position pt){
           how = path.link(prev, pt);
           path.set(pt, how);
           prev = pt;
@@ -106,7 +106,7 @@ part of theseus.solvers;
       //# Runs a single iteration of the solution algorithm. Returns +false+ if the
       //# algorithm has completed, and non-nil otherwise. The return value is
       //# algorithm-dependent.
-      Position step()
+      Position? step()
       {
         throw new UnimplementedError("solver subclasses must implement 'step'");
       }

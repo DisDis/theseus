@@ -12,12 +12,12 @@ part of theseus.formatters;
       //# You will almost never access this class directly. Instead, use
       //# OrthogonalMaze//#to(:png, options) to return the raw PNG data directly.
       class PNGOrthogonal extends PNG {
-        int d1;
-        int d2;
-        int w1;
-        int w2;
-        int width;
-        int height;
+        late int d1;
+        late int d2;
+        late int w1;
+        late int w2;
+        int? width;
+        int? height;
 
         //# Create and return a fully initialized PNG::Orthogonal object, with the
         //# maze rendered. To get the maze data, call //#to_blob.
@@ -49,13 +49,13 @@ part of theseus.formatters;
           }
         }
 
-        void _draw_cell(PNGCanvas canvas, Position point, int x, int y,int cell) {
+        void _draw_cell(PNGCanvas? canvas, Position point, int x, int y,int cell) {
           //#:nodoc:
           if (cell == 0) {
             return;
           }
 
-          _fill_rect(canvas, x + d1, y + d1, x + d2, y + d2, color_at(point));
+          _fill_rect(canvas!, x + d1, y + d1, x + d2, y + d2, color_at(point)!);
 
           bool north = cell & Maze.N == Maze.N;
           bool north_under = (cell >> Maze.UNDER_SHIFT) & Maze.N == Maze.N;
@@ -100,11 +100,11 @@ part of theseus.formatters;
               color_at(point, ANY_E));
         }
 
-       void _draw_vertical(PNGCanvas canvas, int x, int y,int direction, bool corridor,
-            bool wall,int color) {
+       void _draw_vertical(PNGCanvas? canvas, int x, int y,int direction, bool corridor,
+            bool wall,int? color) {
           //#:nodoc:
           if (corridor) {
-            _fill_rect(canvas, x + d1, y, x + d2, y + d1 * direction, color);
+            _fill_rect(canvas!, x + d1, y, x + d2, y + d1 * direction, color!);
             _fill_rect(canvas, x + d1 - w1, y - (w1 * direction), x + d1 + w2,
                 y + (d1 + w2) * direction, options.wall_color);
             _fill_rect(canvas, x + d2 - w2, y - (w1 * direction), x + d2 + w1,
@@ -113,16 +113,16 @@ part of theseus.formatters;
 
           if (wall) {
             _fill_rect(
-                canvas, x + d1 - w1, y + (d1 - w1) * direction, x + d2 + w2,
+                canvas!, x + d1 - w1, y + (d1 - w1) * direction, x + d2 + w2,
                 y + (d1 + w2) * direction, options.wall_color);
           }
         }
 
-        void _draw_horizontal(PNGCanvas canvas, int x, int y, int direction,
-            bool corridor, bool wall,int color) {
+        void _draw_horizontal(PNGCanvas? canvas, int x, int y, int direction,
+            bool corridor, bool wall,int? color) {
           //#:nodoc:
           if (corridor) {
-            _fill_rect(canvas, x, y + d1, x + d1 * direction, y + d2, color);
+            _fill_rect(canvas!, x, y + d1, x + d1 * direction, y + d2, color!);
             _fill_rect(canvas, x - (w1 * direction), y + d1 - w1,
                 x + (d1 + w2) * direction, y + d1 + w2, options.wall_color);
             _fill_rect(canvas, x - (w1 * direction), y + d2 - w2,
@@ -130,7 +130,7 @@ part of theseus.formatters;
           }
 
           if (wall) {
-            _fill_rect(canvas, x + (d1 - w1) * direction, y + d1 - w1,
+            _fill_rect(canvas!, x + (d1 - w1) * direction, y + d1 - w1,
                 x + (d1 + w2) * direction, y + d2 + w2, options.wall_color);
           }
         }

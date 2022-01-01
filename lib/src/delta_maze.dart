@@ -35,8 +35,8 @@ part of theseus;
       return(x + y) % 2 == height % 2;
     }
 
-    List<int> potential_exits_at(int x,int y){ //#:nodoc:
-      int vertical = points_up/*?*/(x, y) ? Maze.S : Maze.N;
+    List<int> potential_exits_at(int x,int? y){ //#:nodoc:
+      int vertical = points_up/*?*/(x, y!) ? Maze.S : Maze.N;
 
       //# list the vertical direction twice. Otherwise the horizontal direction (E/W)
       //# will be selected more often (66% of the time), resulting in mazes with a
@@ -45,7 +45,7 @@ part of theseus;
     }
   
     @override
-    V to<V, P>(FormatType format, [P options]) {
+    V to<V, P>(FormatType format, [P? options]) {
         if (format == FormatType.ascii) {
             return new formatters.ASCIIDelta(this) as V;
         }

@@ -21,8 +21,8 @@ part of theseus;
   class UpsilonMaze extends Maze{
     UpsilonMaze(MazeOptions options) : super(options);
 
-    List<int> potential_exits_at(int x,int y){ //#:nodoc:
-      if ((x+y) % 2 == 0 ){//# octogon
+    List<int> potential_exits_at(int x,int? y){ //#:nodoc:
+      if ((x+y!) % 2 == 0 ){//# octogon
         return [Maze.N, Maze.S, Maze.E, Maze.W, Maze.NW, Maze.NE, Maze.SW, Maze.SE];
       }else {//# square
        return [Maze.N, Maze.S, Maze.E, Maze.W];
@@ -30,7 +30,7 @@ part of theseus;
     }
 
     @override
-    List<int> perform_weave(int from_x,int  from_y,int  to_x,int  to_y,int  direction){ //#:nodoc:
+    List<int> perform_weave(int? from_x,int?  from_y,int  to_x,int  to_y,int  direction){ //#:nodoc:
       apply_move_at(to_x, to_y, direction << Maze.UNDER_SHIFT);
       apply_move_at(to_x, to_y, opposite(direction) << Maze.UNDER_SHIFT);
 
@@ -41,7 +41,7 @@ part of theseus;
     }
 
   @override
-  V to<V, P>(FormatType format, [P options]) {
+  V to<V, P>(FormatType format, [P? options]) {
     if (format == FormatType.ascii) {
          return new formatters.ASCIIUpsilon(this) as V;
        } 

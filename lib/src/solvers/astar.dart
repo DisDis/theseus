@@ -25,18 +25,17 @@ part of theseus.solvers;
       int estimate;
       
       //# The total cost associated with this node (path_cost + estimate)
-      int cost;
+      late int cost;
       
       //# The next node in the linked list for the set that this node belongs to.
-      Node next;
+      late Node next;
 
       //# The array of points leading from the starting point, to this node.
       List<Position> get history=>_history;
       List<Position> _history;
 
-      Node(this.point, this.under, this.path_cost, this.estimate,List<Position> history){ //#:nodoc:
+      Node(this.point, this.under, this.path_cost, this.estimate, this._history){ //#:nodoc:
         //_point, _under, _path_cost, _estimate = point, under, path_cost, estimate
-        _history = history;
         cost = path_cost + estimate;
       }
 
@@ -68,9 +67,9 @@ part of theseus.solvers;
       //# The open set. This is a linked list of Node instances, used by the A*
       //# algorithm to determine which nodes remain to be considered. It is always
       //# in sorted order, with the most likely candidate at the head of the list.
-      Node get open=>_open;
-      Node _open;
-      List<List<int>> _visits;
+      Node? get open=>_open;
+      Node? _open;
+      late List<List<int>> _visits;
 
       Astar(Maze maze/*, a=maze.start, b=maze.finish*/):super(maze,maze.start(),maze.finish()){ //#:nodoc:
         _open = new Node(_a, false, 0, _estimate(_a), []);
@@ -78,22 +77,22 @@ part of theseus.solvers;
       }
 
       List<Position> current_solution(){ //#:nodoc:
-        return new List.from(_open.history)..add(_open.point);
+        return new List.from(_open!.history)..add(_open!.point);
       }
 
       @override
-      Position step(){ //#:nodoc:
+      Position? step(){ //#:nodoc:
         if (_open ==null ){//!_open
           return null;
         }
 
-        Node current = _open;
+        Node current = _open!;
 
         if (current.point == _b){
           _open = null;
           _solution = new List.from(current.history)..add(_b);
         }else{
-          _open = _open.next;
+          _open = _open!.next;
 
           _visits[current.point.y.toInt()][current.point.x.toInt()] |= current.under ? 2 : 1;
 
@@ -131,8 +130,8 @@ part of theseus.solvers;
         var node = new Node(pt, under, path_cost, _estimate(pt), history);
 
         if (_open!=null){
-          Node p = null;
-          Node n = _open;
+          Node? p = null;
+          Node? n = _open;
 
           while (n!=null && n.compareTo(node)==-1 /*n< node*/){
             p = n;
@@ -140,15 +139,15 @@ part of theseus.solvers;
           }
 
           if (p == null){
-            node.next = _open;
+            node.next = _open!;
             _open = node;
           }else{
-            node.next = n;
+            node.next = n!;
             p.next = node;
           }
 
           //# remove duplicates
-          while (node.next!=null && node.next.point == node.point){
+          while (node.next.point == node.point){
             node.next = node.next.next;
           }
         }else{

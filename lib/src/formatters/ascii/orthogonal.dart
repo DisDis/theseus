@@ -50,10 +50,7 @@ enum ASCIIMode{
       class ASCIIOrthogonal extends ASCII{
         //# Returns the dimensions of the given maze, rendered in the given mode.
         //# The +mode+ must be +:plain+, +:unicode+, or +:lines+.
-        static Dimensions dimensions_for(Maze maze,[ASCIIMode mode]){
-          if (mode == null){
-            mode = ASCIIMode.plain;
-          }
+        static Dimensions dimensions_for(Maze maze,[ASCIIMode mode = ASCIIMode.plain]){
           switch (mode){
             case ASCIIMode.plain:
             return new Dimensions(maze.width * 2 + 1, maze.height + 1);
@@ -69,11 +66,7 @@ enum ASCIIMode{
         //# Create and return a fully initialized ASCII canvas. The +options+
         //# parameter may specify a +:mode+ parameter, as described in the documentation
         //# for this class.
-        ASCIIOrthogonal(OrthogonalMaze maze, [ASCIIMode mode = ASCIIMode.plain]):super(dimensions_for(maze, mode).width,dimensions_for(maze, mode).height){
-          if (mode == null){
-                      mode = ASCIIMode.plain;
-                    }
-
+        ASCIIOrthogonal(OrthogonalMaze maze, [ASCIIMode mode = ASCIIMode.plain]):super(dimensions_for(maze, mode).width, dimensions_for(maze, mode).height){
 //          width, height = dimensions_for(maze, mode);
 //          super(width, height)
 
@@ -156,11 +149,12 @@ enum ASCIIMode{
           var cx = 3 * x, cy = 2 * y;
           var cell = maze.getCell(x, y);
 
-          ruby.each_with_index<String>(UTF8_SPRITES[cell & Maze.PRIMARY], (row, sy){
+          ruby.each_with_index<String>(UTF8_SPRITES[cell & Maze.PRIMARY], (String row, int sy){
             for(int sx = 0 ; sx < row.length ; sx++){
               var char = row[sx];
               setCell(cx+sx, cy+sy,char);
             }
+            return false;
           });
 
           var under = cell >> Maze.UNDER_SHIFT;

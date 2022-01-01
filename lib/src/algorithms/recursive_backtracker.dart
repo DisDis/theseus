@@ -9,15 +9,15 @@ part of theseus.algorithms;
 class RecursiveBacktracker extends Base {
   //# The x-coordinate that the generation algorithm will consider next.
   int get x => _x;
-  int _x;
+  late int _x;
 
   //# The y-coordinate that the generation algorithm will consider next.
   int get y => _y;
-  int _y;
+  late int _y;
 
-  List<List<dynamic>> _stack;
-  List<int> get tries => _tries;
-  List<int> _tries;
+  late List<List<dynamic>> _stack;
+  List<int>? get tries => _tries;
+  List<int>? _tries;
 
   RecursiveBacktracker(Maze maze,MazeOptions options):super(maze, options) { //#:nodoc:
     while (true) {
@@ -34,7 +34,7 @@ class RecursiveBacktracker extends Base {
   }
 
   bool do_step() { //#:nodoc:
-    int direction = _next_direction();
+    int? direction = _next_direction();
     if (direction == null) {
       return false;
     }
@@ -57,8 +57,8 @@ class RecursiveBacktracker extends Base {
     _stack.add(<dynamic>[_x, _y, _tries]);
     _tries = new List.from(_maze.potential_exits_at(nx, ny))..shuffle(ruby.getRandom());
     //TODO: Check syntax
-    if (!(ruby.rand(100) < _maze.randomness) && _tries.contains(direction)) { //_tries.include?(direction) unless rand(100) < _maze.randomness
-      _tries.add(direction);
+    if (!(ruby.rand(100) < _maze.randomness) && _tries!.contains(direction)) { //_tries.include?(direction) unless rand(100) < _maze.randomness
+      _tries!.add(direction);
     }
     _x = nx;
     _y = ny;
@@ -71,9 +71,9 @@ class RecursiveBacktracker extends Base {
   //# Returns the next direction that ought to be attempted by the recursive
   //# backtracker. This will also handle the backtracking. If there are no
   //# more directions to attempt, and the stack is empty, this will return +nil+.
-  int _next_direction() {// #:nodoc:
+  int? _next_direction() {// #:nodoc:
     while (true) {
-      int direction = _tries.removeLast();
+      int? direction = _tries!.removeLast();
       var movePos = _maze.move(_x, _y, direction);
       var nx = movePos.x.toInt();
       var ny = movePos.y.toInt();
@@ -81,7 +81,7 @@ class RecursiveBacktracker extends Base {
       if (_maze.valid(nx, ny) && (_maze.getCell(_x, _y) & (direction | (direction << Maze.UNDER_SHIFT)) == 0)) {
         if (_maze.getCell(nx, ny) == 0) {
           return direction;
-        } else if (!_maze.dead(_maze.getCell(nx, ny)) && _maze.weave > 0 && ruby.rand(100) < _maze.weave) {
+        } else if (!_maze.dead(_maze.getCell(nx, ny)) && _maze.weave> 0 && ruby.rand(100) < _maze.weave) {
           //# see if we can weave over/under the cell at (nx,ny)
           if (_maze.weave_allowed(_x, _y, nx, ny, direction)) {
             return direction;
@@ -89,7 +89,7 @@ class RecursiveBacktracker extends Base {
         }
       }
 
-      while (_tries.isEmpty) {
+      while (_tries!.isEmpty) {
         if (_stack.isEmpty) {
           _pending = false;
           return null;
@@ -97,7 +97,7 @@ class RecursiveBacktracker extends Base {
           var _tmp = _stack.removeLast();
           _x = _tmp[0] as int;
           _y = _tmp[1] as int;
-          _tries = _tmp[2] as List<int>;
+          _tries = _tmp[2] as List<int>?;
         }
       }
     }

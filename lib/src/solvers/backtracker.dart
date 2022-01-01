@@ -16,8 +16,8 @@ class BacktrackerStackItem{
 }
 
     class Backtracker extends Base{
-      List<List<int>> _visits;
-      List<BacktrackerStackItem> _stack;
+      List<List<int>>? _visits;
+      late List<BacktrackerStackItem> _stack;
       Backtracker(Maze maze):super(maze,maze.start(),maze.finish()){ //#:nodoc:
         _visits = new List.generate(_maze.height,(_)=>new List.generate(_maze.width,(_)=> 0));
         _stack = [];
@@ -29,7 +29,7 @@ class BacktrackerStackItem{
         return _stack.map((item)=>item.position); //_stack[1..-1].map { |item| item[0] };
       }
 
-      final BacktrackerStackItem FAIL_POSITION = new BacktrackerStackItem(null,null);
+      // final BacktrackerStackItem FAIL_POSITION = new BacktrackerStackItem(null,null);
       
      Position step(){//#:nodoc:
         /*if (_stack.length ==1 && _stack[0] == FAIL_POSITION/*[:fail]*/){

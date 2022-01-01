@@ -42,7 +42,7 @@ part of theseus.formatters;
 // any = proc { |x| x | (x << Maze.UNDER_SHIFT) };
           int any(int x) => x | (x << Maze.UNDER_SHIFT);
 
-          void _draw_cell(PNGCanvas canvas, Position point, bool shifted, num x,
+          void _draw_cell(PNGCanvas? canvas, Position point, bool shifted, num x,
               num y, int cell) {
               if (cell == 0) {
                   return;
@@ -64,7 +64,7 @@ part of theseus.formatters;
               var p5 = new Position.xy(p1.x, p4.y);
               var p6 = new Position.xy(x + options.cell_padding, p3.y);
 
-              _fill_poly(canvas, [p1, p2, p3, p4, p5, p6], color_at(point));
+              _fill_poly(canvas!, [p1, p2, p3, p4, p5, p6], color_at(point));
 
               var n = Maze.N;
               var s = Maze.S;
@@ -80,7 +80,7 @@ part of theseus.formatters;
                   var r1 = p5;
                   var r2 = move(p4, 0, options.cell_padding * 2);
                   _fill_rect(
-                      canvas, r1.x, r1.y, r2.x, r2.y, color_at(point, any(s)));
+                      canvas, r1.x, r1.y, r2.x, r2.y, color_at(point, any(s))!);
                   _line(canvas, p5, move(p5, 0, options.cell_padding * 2),
                       options.wall_color);
                   _line(canvas, p4, move(p4, 0, options.cell_padding * 2),
@@ -88,8 +88,8 @@ part of theseus.formatters;
               }
 
               if (cell & any(ne) != 0) {
-                  var ne_x = x + 3 * options.cell_size / 4.0;
-                  var ne_y = y - options.cell_size * 0.5;
+                  num ne_x = x + 3 * options.cell_size / 4.0;
+                  num ne_y = y - options.cell_size * 0.5;
                   var ne_p5 = new Position.xy(ne_x + options.cell_padding + s4,
                       ne_y + options.cell_size - options.cell_padding);
                   var ne_p6 = new Position.xy(ne_x + options.cell_padding,
@@ -106,8 +106,8 @@ part of theseus.formatters;
               }
 
               if (cell & any(se) != 0) {
-                  var se_x = x + 3 * options.cell_size / 4.0;
-                  var se_y = y + options.cell_size * 0.5;
+                  num se_x = x + 3 * options.cell_size / 4.0;
+                  num se_y = y + options.cell_size * 0.5;
                   var se_p1 = new Position.xy(se_x + s4 + options.cell_padding,
                       se_y + options.cell_padding);
                   var se_p6 = new Position.xy(se_x + options.cell_padding,

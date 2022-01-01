@@ -22,7 +22,7 @@ class Dimensions{
       //# same as, the height of the maze.
       final int height;
 
-      List<List<String>> _chars;
+      late List<List<String>> _chars;
       //# Create a new ASCII canvas with the given width and height. The canvas is
       //# initially blank (set to whitespace).
       ASCII(this.width,this.height){

@@ -6,13 +6,13 @@ abstract class PNGCanvas{
 
   void line(num x1, num y1, num x2, num y2,num color);
 
-  void fillRect(num x0, num y0, num x1, num y1,num color);
+  void fillRect(num x0, num y0, num x1, num y1,num? color);
 
-  void point(num x, num y,num color);
+  void point(num x, num y,num? color);
 
   void setBackground(num background);
 
-  void setSize(num width, num height);
+  void setSize(num? width, num? height);
 }
 
 
@@ -51,9 +51,9 @@ class PNGFormatterOptions{
     int background     = 0x00000000;
     int outer_padding  = 2;
     int cell_padding   = 1;
-    solvers.Base solution      = null;
+    solvers.Base? solution      = null;
 
-    PNGCanvas canvas;
+    late PNGCanvas canvas;
   List<Path> paths = [];
 }
 //require 'chunky_png'
@@ -90,13 +90,11 @@ class PNGFormatterOptions{
         PNGFormatterOptions get options => _options;
         PNGFormatterOptions _options;
 
-        List<Path> _paths;
-        PNGCanvas canvas;
+        late List<Path> _paths;
+        PNGCanvas get canvas => _options.canvas;
 
 
-        PNG(Maze maze, PNGFormatterOptions options) {
-            _options = options;
-            canvas = options.canvas;
+        PNG(Maze maze, this._options) {
 //        _options = DEFAULTS.merge(options);
 
 //        [#background, #wall_color, #cell_color, #solution_color].forEach((c){
@@ -119,7 +117,7 @@ class PNGFormatterOptions{
         //# +:color: metadata from the first path that is set at the given point is
         //# returned. If no path describes the given point, then the value of the
         //# +:cell_color+ option is returned.
-        int color_at(Position pt, [int direction = null]) {
+        int? color_at(Position pt, [int? direction = null]) {
             //_paths.forEach((Path path)
             for (Path path in _paths)
             {
@@ -178,12 +176,12 @@ class PNGFormatterOptions{
 //            }
 
             if (x0>x1){
-                var tmp = x0;
+                num? tmp = x0;
                 x0 = x1;
                 x1 = tmp;
             }
             if (y0>y1){
-                var tmp = y0;
+                num? tmp = y0;
                 y0 = y1;
                 y1 = tmp;
             }
@@ -199,7 +197,7 @@ class PNGFormatterOptions{
         //# Each element of +points+ must be a 2-tuple describing a vertex of the
         //# polygon. It is assumed that the polygon is closed. All points are
         //# clamped (naively) to lie within the canvas' bounds.
-        void _fill_poly(PNGCanvas canvas, List<Position> points,int color) {
+        void _fill_poly(PNGCanvas canvas, List<Position> points,int? color) {
             num min_y = 1000000;
             num max_y = -1000000;
             points.forEach((Position xy) {
@@ -219,13 +217,13 @@ class PNGFormatterOptions{
 
                 List<num> nodes = <num>[];
 
-                Position prev = points.last;
+                Position? prev = points.last;
                 points.forEach((Position point) {
-                    if (point.y < y && prev.y >= y ||
-                        prev.y < y && point.y >= y) {
+                    if (point.y < y && prev!.y >= y ||
+                        prev!.y < y && point.y >= y) {
                         nodes.add((point.x +
-                            (y - point.y) /*.to_f*/ / (prev.y - point.y) *
-                                (prev.x - point.x))); // <<
+                            (y - point.y) /*.to_f*/ / (prev!.y - point.y) *
+                                (prev!.x - point.x))); // <<
                     }
                     prev = point;
                 });

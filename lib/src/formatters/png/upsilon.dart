@@ -5,7 +5,7 @@ class Metrics {
   final num s4;
   final num inc;
 
-  Metrics(PNGFormatterOptions options, {num size})
+  Metrics(PNGFormatterOptions options, {required num size})
       :this.size = size,
         this.s4 = size / 4.0,
         this.inc = 3 * options.cell_size / 4.0;
@@ -98,7 +98,7 @@ class Metrics {
             var r2 = edge ? move(p4, options.cell_padding, 0) : move(
                 p7, options.cell_size, 0);
             _fill_rect(
-                canvas, r1.x, r1.y, r2.x, r2.y, color_at(point, any(Maze.E)));
+                canvas, r1.x, r1.y, r2.x, r2.y, color_at(point, any(Maze.E))!);
             _line(canvas, r1, new Position.xy(r2.x, r1.y), options.wall_color);
             _line(canvas, r2, new Position.xy(r1.x, r2.y), options.wall_color);
           }
@@ -116,7 +116,7 @@ class Metrics {
             var r1 = p6;
             var r2 = move(p2, 0, options.cell_size);
             _fill_rect(
-                canvas, r1.x, r1.y, r2.x, r2.y, color_at(point, any(Maze.S)));
+                canvas, r1.x, r1.y, r2.x, r2.y, color_at(point, any(Maze.S))!);
             _line(canvas, r1, new Position.xy(r1.x, r2.y), options.wall_color);
             _line(canvas, r2, new Position.xy(r2.x, r1.y), options.wall_color);
           }
@@ -155,7 +155,7 @@ class Metrics {
           var p2 = new Position.xy(
               x + options.cell_size - v, y + options.cell_size - v);
 
-          _fill_rect(canvas, p1.x, p1.y, p2.x, p2.y, color_at(point));
+          _fill_rect(canvas, p1.x, p1.y, p2.x, p2.y, color_at(point)!);
 
 //          any = proc { |x| x | (x << Maze.UNDER_SHIFT) };
 
@@ -163,7 +163,7 @@ class Metrics {
             var r1 = new Position.xy(p2.x, p1.y);
             var r2 = new Position.xy(x + metrics.inc + v, p2.y);
             _fill_rect(
-                canvas, r1.x, r1.y, r2.x, r2.y, color_at(point, any(Maze.E)));
+                canvas, r1.x, r1.y, r2.x, r2.y, color_at(point, any(Maze.E))!);
             _line(canvas, r1, new Position.xy(r2.x, r1.y), options.wall_color);
             _line(canvas, new Position.xy(r1.x, r2.y), r2, options.wall_color);
           }
@@ -172,7 +172,7 @@ class Metrics {
             var r1 = new Position.xy(p1.x, p2.y);
             var r2 = new Position.xy(p2.x, y + metrics.inc + v);
             _fill_rect(
-                canvas, r1.x, r1.y, r2.x, r2.y, color_at(point, any(Maze.S)));
+                canvas, r1.x, r1.y, r2.x, r2.y, color_at(point, any(Maze.S))!);
             _line(canvas, r1, new Position.xy(r1.x, r2.y), options.wall_color);
             _line(canvas, new Position.xy(r2.x, r1.y), r2, options.wall_color);
           }

@@ -1,14 +1,11 @@
 name: theseus
-version: 2.0.0
+version: 2.1.0
 homepage: https://github.com/DisDis/theseus
-authors:
-- Jamis Buck <jamis@jamisbuck.org>
-- Igor Demyanov <igor.demyanov@gmail.com>
 description: Theseus port https://github.com/jamis/theseus version 1.0.2. Theseus is a library for generating and solving mazes.
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dev_dependencies:
-  test: ^1.3.0
-  image: ^2.0.0
+  test: ^1.20.1
+  image: ^3.1.0
